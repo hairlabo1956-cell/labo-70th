@@ -252,9 +252,10 @@ body.scrolled .jump{transform:translateX(-50%) translateY(0)}
 }
 
 /* ================= 装飾・演出 ================= */
-/* 見出しの版ズレゴースト */
+/* 見出しの版ズレゴースト（現在は非表示） */
 .gh{position:relative;z-index:0;display:inline-block}
-.gh::before{content:attr(data-t);position:absolute;left:.055em;top:.05em;color:var(--accent);z-index:-1;white-space:pre}
+/* 発注者判断で非表示（2026-09-05）。戻す場合は display:none を消す */
+.gh::before{content:attr(data-t);position:absolute;left:.055em;top:.05em;color:var(--accent);z-index:-1;white-space:pre;display:none}
 
 /* 巨大な透かし数字 */
 .wrapsec{position:relative;overflow:hidden}
