@@ -104,7 +104,23 @@
 
 ローカルで見るには、このフォルダで `npx http-server -p 8137` を実行して `http://localhost:8137/` を開く。
 
-## 公開手順（Phase 4：発注者のアカウントで行う）
+## 公開状況（2026-09-05 公開済み）
+
+- GitHub：https://github.com/hairlabo1956-cell/labo-70th（Public、ブランチ main）
+- Cloudflare Pages：プロジェクト `labo-70th`（アカウント hair.labo.1956@gmail.com）。GitHub App の権限は labo-70th のみ。main への保存で自動デプロイ。
+- 公開URL：**https://labo-70th.pages.dev/**（brotli 圧縮あり。HTML 34KB→9.7KB）
+- `robots.txt` を追加（無いと 404 ページの HTML が返り、Lighthouse の SEO が 92 になる）
+
+公開URLでの Lighthouse（モバイル、2026-09-05）：
+
+| 方式 | Performance | Accessibility | SEO | Best Practices | FCP | LCP | TBT | observed FCP / LCP |
+|---|---|---|---|---|---|---|---|---|
+| simulate（既定） | **77** | 100 | 92→robots.txt追加後に再計測 | 100 | 3.4 s | 4.0 s | 0 ms | 1.3 s / 2.7 s |
+| devtools（実スロットリング） | 61 | 100 | 92 | 100 | 3.1 s | 3.1 s | 860 ms | 3.1 s / 3.1 s |
+
+LCP の実測：回線制限なし 0.36 s（スマホ相当）、Lighthouse 既定の観測値 2.7 s、低速4G＋CPU4倍の実スロットリング 3.1 s。通常回線では 2.5 秒以内、最悪条件では超える。
+
+## 公開手順（Phase 4：実施済み。再構築する場合の記録）
 
 1. GitHub にサインアップ → 「New repository」→ 名前 `labo-70th`、Public、README なしで作成。
 2. リポジトリ画面「uploading an existing file」から、このフォルダの中身をドラッグ＆ドロップ（`_old-20260901/` と `.claude/` は不要）。「Commit changes」。
