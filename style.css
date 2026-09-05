@@ -1,0 +1,416 @@
+/* ============================================================
+   LABO 70th ANNIVERSARY ｜ style.css
+   ⚠️ このファイルは「見た目と動き」の設定です。
+      文章・写真の差し替えは index.html で行ってください（このファイルは触らなくて大丈夫です）。
+   色は下の :root の4色だけ（白・オレンジ・黒・紺）。新しい色は足しません。
+   ============================================================ */
+:root{
+  --bg:#FFFFFF;       /* 背景：純白 */
+  --accent:#FF9900;   /* オレンジ（ビラ実測値） */
+  --ink:#000000;      /* 文字：純黒 */
+  /* 補助文字のグレーは #767676（白地でコントラスト比 4.54:1。#8a8a8a は 3.45:1 で基準未達だったため） */
+  --duotone:#212E7D;  /* 写真デュオトーンの濃色（ビラ実測値） */
+  --grot:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --mincho:'Shippori Mincho','Hiragino Mincho ProN','Yu Mincho',YuMincho,serif;
+  --gothic:'Noto Sans JP','Hiragino Sans','Yu Gothic',sans-serif;
+
+  /* ビラ実測値（1414×2000）
+     版 274-1170 / 343-1564   → 896×1221（比 .7338）
+     写真 413-1036 / 513-1395 → 版の左15.5% 上13.9% 幅69.5% 高72.3%
+     年号 1128-1245 / 663-1335→ 版の左95.3% 上26.2% 文字サイズ=版幅×.182
+     見出し 左12.9% 上8.75% 行送り0.85 ANNIVERSARY幅65.0% */
+  --ph:69vh;--pw:calc(var(--ph) * .7338);--block-top:22.5vh;--block-right:6vw;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--gothic);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.event a:focus-visible{outline-color:var(--ink)}
+
+/* Lenis（慣性スクロール）の推奨設定 */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:hidden}
+
+/* ================= 共通 ================= */
+.sec{padding:15vh 6vw;max-width:1040px;margin:0 auto}
+.h2{
+  font-family:var(--grot);font-weight:800;text-transform:uppercase;
+  font-size:clamp(2.1rem,6.2vw,5.2rem);line-height:.9;letter-spacing:-.035em;
+  clip-path:inset(108% -6% -14% -6%);
+}
+.h2.in{animation:rise 1s cubic-bezier(.19,1,.22,1) both}
+@keyframes rise{0%{clip-path:inset(108% -6% -14% -6%);transform:translate3d(0,.18em,0)}
+100%{clip-path:inset(-14% -6% -14% -6%);transform:none}}
+.sub{font-family:var(--grot);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#767676;margin-bottom:1.6em}
+.body{font-family:var(--mincho);font-size:clamp(.98rem,1.32vw,1.14rem);line-height:2.15;max-width:33em}
+.body p+p{margin-top:1.7em}
+.tag{display:inline-block;margin-left:.6em;vertical-align:.3em;font-family:var(--grot);font-weight:600;font-size:.56rem;letter-spacing:.1em;background:var(--accent);color:var(--ink);padding:.35em .7em}
+
+/* ================= ヒーロー ================= */
+.hero{position:relative;min-height:100svh;padding:4.5vh 4vw;display:grid;grid-template-rows:auto 1fr auto;overflow:hidden}
+.sheet{display:contents}
+.marks{position:absolute;inset:2.4vh 2.4vw;pointer-events:none;opacity:0}
+.mark{position:absolute;width:26px;height:26px}
+.mark::before,.mark::after{content:'';position:absolute;background:var(--ink)}
+.mark::before{width:100%;height:1px;top:50%}
+.mark::after{height:100%;width:1px;left:50%}
+.mark.tl{top:0;left:0}.mark.tr{top:0;right:0}.mark.bl{bottom:0;left:0}.mark.br{bottom:0;right:0}
+.title{position:relative;z-index:3;font-family:var(--grot);font-weight:800;
+  font-size:min(10.6vw,14.8vh);line-height:.85;letter-spacing:-.038em;text-transform:uppercase}
+.line{display:block;white-space:nowrap}
+.ch{display:inline-block}
+.block{position:absolute;z-index:1;top:var(--block-top);right:var(--block-right);width:var(--pw);height:var(--ph)}
+.plate{position:absolute;inset:0;background:var(--accent);z-index:1}
+.plate-ghost{position:absolute;inset:0;background:var(--accent);z-index:0;opacity:0;mix-blend-mode:multiply}
+.photo-wrap{position:absolute;z-index:2;left:15.5%;top:13.9%;width:69.5%;height:72.3%;clip-path:inset(0 0 100% 0);
+  background:var(--duotone);isolation:isolate}
+/* デュオトーンの掛け方（Safari対策）：filter（白黒化）は img に、mix-blend-mode（紺と合成）はその親 .tone に分けて掛ける。
+   同じ要素に両方を掛けると iOS 26 Safari で「フィルタだけ効いて合成されない」不具合がある（WebKit 既知） */
+.photo-wrap .tone{position:absolute;inset:0;mix-blend-mode:screen}
+.photo-wrap img{width:100%;height:100%;object-fit:cover;filter:grayscale(1)}
+.years{position:absolute;z-index:3;left:95.3%;top:26.2%;font-family:var(--grot);font-weight:800;
+  font-size:calc(var(--pw) * .182);line-height:1;letter-spacing:-.02em;
+  writing-mode:vertical-rl;transform:rotate(180deg);clip-path:inset(0 0 100% 0);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.foot{position:relative;z-index:3;display:flex;justify-content:space-between;align-items:flex-end;gap:3vw;width:min(48vw,680px)}
+.foot > *{opacity:0}
+.jp{font-family:var(--mincho);font-size:clamp(.98rem,1.55vw,1.4rem);letter-spacing:.04em;line-height:1.8}
+.en{font-family:var(--grot);font-weight:600;font-size:clamp(.92rem,1.45vw,1.3rem);line-height:1.5;letter-spacing:-.01em;margin-top:.5em}
+.time{font-family:var(--grot);font-size:clamp(.76rem,1.1vw,.98rem);margin-top:.2em}
+.meta{display:flex;gap:clamp(1rem,2.2vw,2.6rem);font-family:var(--grot);font-size:clamp(.66rem,.85vw,.78rem);line-height:1.55}
+.meta p{max-width:16ch}
+/* JSが動いている時は、開幕アニメーションが始まるまで文字と版を隠しておく（代替フォントでの一瞬の表示を防ぐ） */
+html.js .hero:not(.play) .ch{clip-path:inset(108% -6% -14% -6%)}
+html.js .hero:not(.play) .plate{opacity:0}
+
+/* ================= STAFF ================= */
+.staff-row{display:grid;grid-template-columns:minmax(0,42%) minmax(0,58%);gap:clamp(24px,4vw,64px);align-items:center;margin-top:9vh}
+.staff-row:nth-child(even) .sp{order:2}
+.sp{position:relative;aspect-ratio:4/5;background:var(--accent);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.sp span{font-family:var(--grot);font-weight:700;font-size:.66rem;letter-spacing:.14em;text-align:center;line-height:2}
+/* 写真が入ると、オレンジの枠が紺のデュオトーン写真に変わる */
+.sp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1);z-index:1}
+.sp .tone{position:absolute;inset:0;mix-blend-mode:screen;z-index:1}
+.sp > img{mix-blend-mode:screen}  /* JSが動かず .tone に包まれなかった時の予備 */
+.sp.has-img,.sp:has(img){background:var(--duotone)}
+.sp img ~ span,.sp .tone ~ span,.sp:has(img) span{display:none}
+.st-name{font-family:var(--grot);font-weight:800;font-size:clamp(1.3rem,2.4vw,2.1rem);letter-spacing:-.02em;text-transform:uppercase}
+.st-role{font-family:var(--grot);font-size:.72rem;letter-spacing:.14em;color:#767676;margin-top:.7em;text-transform:uppercase}
+.st-text{font-family:var(--mincho);font-size:clamp(.94rem,1.2vw,1.06rem);line-height:2.1;margin-top:1.5em;max-width:30em}
+
+/* ================= HISTORY ================= */
+.history{position:relative}
+.sticky{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;align-items:center}
+.rail{display:flex;align-items:center;gap:clamp(24px,3.6vw,64px);padding:0 max(8vw,calc((100vw - 1040px)/2));will-change:transform}
+/* 枠の幅は index.html 側の style="--w:28" の数字で決まる（大きいほど広い枠。プロトタイプの min(28vw,360px) と同じ比率） */
+.panel{flex:0 0 auto;position:relative;width:min(calc(var(--w,24) * 1vw),calc(var(--w,24) * 12.9px))}
+.panel .year{font-family:var(--grot);font-weight:800;font-size:clamp(1.4rem,2.4vw,2.5rem);letter-spacing:-.025em;line-height:1;margin-bottom:.55em;font-variant-numeric:tabular-nums}
+.panel .cap{font-family:var(--mincho);font-size:clamp(.8rem,1vw,.98rem);line-height:1.95;margin-top:1.1em;max-width:26em}
+/* 写真枠：紺のデュオトーンはCSSで自動適用。写真ファイルを差し替えても同じ色調になる */
+.shot{position:relative;overflow:hidden;aspect-ratio:3/4;background:var(--duotone);isolation:isolate}
+.shot.live{cursor:none;touch-action:pan-x pan-y}
+.shot .layer{position:absolute;inset:0}
+.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1)}
+.shot .base{mix-blend-mode:screen}
+.shot > img{mix-blend-mode:screen}  /* JSが動かず層に分かれなかった時の予備 */
+.shot .raw{clip-path:circle(0px at 50% 50%);will-change:clip-path;z-index:2}
+.shot .raw img{transform:scale(1.04);filter:none}
+.rim{position:absolute;z-index:3;top:0;left:0;width:calc(var(--r,70px)*2);height:calc(var(--r,70px)*2);
+  margin:calc(var(--r,70px)*-1) 0 0 calc(var(--r,70px)*-1);border-radius:50%;border:2px solid var(--accent);
+  box-shadow:0 0 0 1px rgba(255,255,255,.55) inset;pointer-events:none;opacity:0;transition:opacity .25s ease;will-change:transform}
+.rim::after{content:'';position:absolute;inset:8%;border-radius:50%;background:linear-gradient(128deg,rgba(255,255,255,.30) 0%,rgba(255,255,255,0) 42%)}
+.shot.active .rim{opacity:1}
+/* 写真待ちの枠（PHOTO WANTED）。中に <img> を入れると自動で写真枠になる */
+.empty{background:var(--accent);display:flex;align-items:center;justify-content:center;text-align:center}
+.empty span{font-family:var(--grot);font-weight:700;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;line-height:2}
+.shot.empty{background:var(--accent)}
+.shot.empty.has-img,.shot.empty:has(img){background:var(--duotone)}
+.shot img ~ span,.shot:has(img) span{display:none}
+.counter{position:fixed;z-index:30;right:2.6vw;top:50%;transform:translateY(-50%);font-family:var(--grot);font-weight:800;
+  font-size:clamp(1.9rem,5.6vw,5.4rem);letter-spacing:-.02em;line-height:1;writing-mode:vertical-rl;
+  font-variant-numeric:tabular-nums;pointer-events:none;mix-blend-mode:difference;color:#fff;opacity:0;transition:opacity .35s}
+.progress{position:fixed;z-index:30;left:0;bottom:0;height:3px;background:var(--accent);width:0;opacity:0;transition:opacity .35s}
+body.inhistory .counter,body.inhistory .progress{opacity:1}
+.hint{position:absolute;z-index:7;left:50%;bottom:5vh;transform:translateX(-50%);font-family:var(--grot);font-weight:600;
+  font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:var(--bg);padding:.8em 1.4em;transition:opacity .5s;white-space:nowrap}
+.hint .touch{display:none}
+.history.moved .hint{opacity:0}
+
+/* ================= EVENT ================= */
+.event{background:var(--accent);padding:14vh 6vw;margin-top:4vh}
+.event-in{max-width:1040px;margin:0 auto}
+.event .date{font-family:var(--grot);font-weight:800;font-size:clamp(2.6rem,10vw,9rem);line-height:.86;letter-spacing:-.04em}
+.event .hours{font-family:var(--grot);font-weight:600;font-size:clamp(1.1rem,3vw,2.4rem);letter-spacing:-.02em;margin-top:.3em}
+.event dl{display:grid;grid-template-columns:auto 1fr;gap:1.1em 2.4em;margin-top:7vh;font-size:clamp(.9rem,1.2vw,1.05rem);line-height:1.8}
+.event dt{font-family:var(--grot);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;padding-top:.5em}
+.event .free{font-family:var(--grot);font-weight:800;font-size:clamp(1.2rem,3.4vw,2.6rem);letter-spacing:-.02em;margin-top:6vh;line-height:1.25}
+.event .fine{font-size:.82rem;line-height:1.9;margin-top:2em;max-width:44em;opacity:.8}
+
+/* ================= CONTENTS ================= */
+.item{border-top:1px solid #e0e0e0;padding:5vh 0;display:grid;grid-template-columns:5.5rem 1fr;gap:2vw}
+.item:last-child{border-bottom:1px solid #e0e0e0}
+.num{font-family:var(--grot);font-weight:800;font-size:1rem;letter-spacing:.02em;padding-top:.35em}
+.item h3{font-family:var(--grot);font-weight:800;font-size:clamp(1.3rem,2.6vw,2.2rem);letter-spacing:-.025em;text-transform:uppercase}
+.item p{font-family:var(--mincho);line-height:2.05;margin-top:1.1em;max-width:34em;font-size:clamp(.9rem,1.15vw,1.02rem)}
+.shops{margin-top:1.6em;display:grid;gap:.9em;max-width:38em}
+.shop{display:grid;grid-template-columns:minmax(7rem,auto) 1fr;gap:1.4em;font-size:clamp(.86rem,1.1vw,.98rem);line-height:1.7;padding-bottom:.9em;border-bottom:1px dotted #d5d5d5}
+.shop b{font-family:var(--grot);font-weight:700;letter-spacing:-.01em}
+.shop em{font-style:normal;color:#767676;font-family:var(--grot);font-size:.78em}
+.drink{margin-top:1.8em;display:inline-block;background:var(--accent);padding:.9em 1.3em;font-size:.9rem;line-height:1.7;font-weight:500}
+
+/* ================= ACCESS ================= */
+.map{display:inline-block;margin-top:2em;font-family:var(--grot);font-weight:600;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid var(--ink);padding:1em 1.8em;text-decoration:none}
+.map:hover{background:var(--ink);color:var(--bg)}
+.park{margin-top:6vh;border-left:5px solid var(--accent);padding:.3em 0 .3em 1.5em}
+.park h3{font-family:var(--grot);font-weight:800;font-size:1rem;letter-spacing:.02em;text-transform:uppercase}
+.park ul{margin:1.1em 0 0 1.1em;line-height:2.05;font-size:clamp(.88rem,1.1vw,1rem)}
+
+/* ================= フッター ================= */
+.site-foot{padding:12vh 6vw 9vh;border-top:1px solid #e0e0e0;max-width:1040px;margin:0 auto}
+.site-foot .name{font-family:var(--grot);font-weight:800;font-size:clamp(1.6rem,4vw,3rem);letter-spacing:-.03em;text-transform:uppercase}
+.site-foot .info{margin-top:2em;line-height:2.05;font-size:.92rem}
+.sns{margin-top:2.5em;display:flex;gap:1.6em;font-family:var(--grot);font-weight:600;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}
+.hash{margin-top:6vh;font-family:var(--mincho);font-size:clamp(1rem,2vw,1.5rem);letter-spacing:.05em}
+
+/* ================= 固定ボタン ================= */
+.jump{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(120%);z-index:40;
+  background:var(--ink);color:var(--bg);text-decoration:none;font-family:var(--grot);font-weight:600;
+  font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;padding:.95em 1.6em;transition:transform .4s cubic-bezier(.19,1,.22,1)}
+body.scrolled .jump{transform:translateX(-50%) translateY(0)}
+
+/* ================= 開幕アニメーション（全体約3.4秒） ================= */
+.play .marks{animation:marksIn .7s ease-out .05s both}
+@keyframes marksIn{0%{opacity:0}40%{opacity:1}100%{opacity:.14}}
+.play .plate{animation:plateDrop 1.6s both}
+@keyframes plateDrop{
+  0%{transform:translate3d(-1.6%,-9%,0) scale(1.012);opacity:0}
+  18%{opacity:1}
+  46%{transform:translate3d(-1.15%,-1.5%,0) scale(1.008);animation-timing-function:cubic-bezier(.16,1,.3,1)}
+  64%{transform:translate3d(-1.15%,-1.5%,0) scale(1.008)}
+  100%{transform:translate3d(0,0,0) scale(1);animation-timing-function:cubic-bezier(.7,0,.2,1)}}
+.play .plate-ghost{animation:ghost 1.6s both}
+@keyframes ghost{0%{opacity:0;transform:translate3d(1.4%,1.9%,0)}30%{opacity:.34}
+64%{opacity:.30;transform:translate3d(1.1%,1.4%,0)}100%{opacity:0;transform:translate3d(0,0,0)}}
+/* 回転・拡大縮小は使わない。線の裏から本体がまっすぐせり上がる（クリップ＋垂直移動のみ） */
+.play .ch{animation:charRise .98s cubic-bezier(.19,1,.22,1) both;animation-delay:calc(.72s + var(--i) * .05s)}
+@keyframes charRise{0%{clip-path:inset(108% -6% -14% -6%);transform:translate3d(0,.2em,0)}
+100%{clip-path:inset(-14% -6% -14% -6%);transform:translate3d(0,0,0)}}
+.play .photo-wrap{animation:wipe 1.25s cubic-bezier(.16,1,.3,1) 1.42s both}
+@keyframes wipe{0%{clip-path:inset(0 0 100% 0)}100%{clip-path:inset(0 0 0 0)}}
+.play .years{animation:wipe 1.05s cubic-bezier(.16,1,.3,1) 2.0s both}
+.play .foot > *{animation:footIn 1s cubic-bezier(.16,1,.3,1) both}
+.play .foot > *:nth-child(1){animation-delay:2.25s}
+.play .foot > *:nth-child(2){animation-delay:2.4s}
+@keyframes footIn{0%{opacity:0;transform:translate3d(0,14px,0)}100%{opacity:1;transform:none}}
+
+/* ---------- PC 微調整 ---------- */
+@media (min-width:1024px) and (max-height:800px){:root{--ph:65vh;--block-top:24.5vh}.title{font-size:min(9.6vw,15.2vh)}}
+@media (min-width:1024px) and (max-height:660px){:root{--ph:60vh;--block-top:27vh}.title{font-size:min(8.2vw,14vh)}}
+@media (min-width:1024px) and (max-aspect-ratio:4/3){:root{--ph:62vh;--block-top:24vh;--block-right:9vw}.foot{width:min(42vw,560px)}}
+@media (min-width:641px) and (max-width:1023px){
+  :root{--ph:50vh;--block-right:8vw;--block-top:26vh}
+  .hero{padding:5vh 6vw}.title{font-size:min(11vw,15vh)}.foot{width:100%}
+}
+
+/* ================= スマートフォン ================= */
+@media (max-width:820px){
+  /* ピン留めをやめて横スワイプに切り替える（モバイルでのピン留めはスクロール事故が起きやすい） */
+  .sticky{position:relative;height:auto;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .rail{transform:none!important;padding:0 6vw;gap:20px}
+  .panel{scroll-snap-align:center;width:min(calc(var(--w,24) * 2.3vw),calc(var(--w,24) * 12.9px))}
+  .counter{right:2.4vw;font-size:2.1rem}
+  .shot.live{cursor:pointer}
+  .hint .mouse{display:none}.hint .touch{display:inline}
+  .staff-row{grid-template-columns:1fr;gap:2.4vh;margin-top:7vh}
+  .staff-row:nth-child(even) .sp{order:0}
+  .sp{aspect-ratio:3/2}
+}
+@media (max-width:640px){
+  .sec{padding:11vh 7vw}
+  /* ヒーロー：ビラ完全再現。ポスター領域は 1414×1700 で切り、縦位置の%はすべて1700基準 */
+  .hero{display:block;padding:0;min-height:auto;overflow:visible}
+  .sheet{display:block;position:relative;width:100%;aspect-ratio:1414/1700}
+  .marks{inset:2.6% 2.6% 1.6%}.mark{width:5.2vw;height:5.2vw}
+  .title{position:absolute;left:12.9%;top:10.29%;font-size:11.32vw;line-height:.85;letter-spacing:-.025em}
+  .block{position:absolute;left:19.4%;right:auto;top:20.18%;width:63.37%;height:71.82%}
+  .years{font-size:calc(63.37vw * .182)}
+  /* 下部の文字：配置と並び順は紙のまま、寸法だけ可読サイズへ */
+  .foot{display:block;width:auto;padding:0 12.9% 9vh}
+  .jp{font-size:max(4.6vw,16px);line-height:1.75}
+  .en{font-size:max(4.4vw,15px);margin-top:.55em}
+  .time{font-size:max(3.5vw,12px)}
+  .meta{margin-top:5.2vw;gap:7vw;font-size:max(3.1vw,11px);line-height:1.6}
+  .meta p{max-width:18ch}
+  .item{grid-template-columns:1fr;gap:.6em}
+  .num{padding-top:0}
+  .event dl{grid-template-columns:1fr;gap:.4em 0}
+  .event dt{padding-top:1.4em}
+  .shop{grid-template-columns:1fr;gap:.2em}
+}
+
+/* ================= 装飾・演出 ================= */
+/* 見出しの版ズレゴースト */
+.gh{position:relative;z-index:0;display:inline-block}
+.gh::before{content:attr(data-t);position:absolute;left:.055em;top:.05em;color:var(--accent);z-index:-1;white-space:pre}
+
+/* 巨大な透かし数字 */
+.wrapsec{position:relative;overflow:hidden}
+.wm{position:absolute;font-family:var(--grot);font-weight:800;line-height:.75;
+  font-size:min(44vw,660px);color:transparent;-webkit-text-stroke:2px rgba(0,0,0,.075);
+  pointer-events:none;user-select:none;z-index:0}
+.wrapsec > .sec{position:relative;z-index:1}
+
+/* 流れる帯（マーキー）：1フレーズが流れきるまで約9秒 */
+.bands{position:relative;padding:7vh 0;overflow:hidden}
+.band{overflow:hidden;white-space:nowrap;padding:.55em 0;width:118%;margin-left:-9%}
+.band.a{background:var(--accent);color:var(--ink);transform:rotate(-2.4deg)}
+.band.b{background:var(--ink);color:var(--bg);transform:rotate(1.8deg);margin-top:-.4em}
+.track{display:inline-flex;font-family:var(--grot);font-weight:800;text-transform:uppercase;
+  font-size:clamp(1.15rem,3vw,2.6rem);letter-spacing:-.02em;will-change:transform}
+.track span{padding-right:.55em}
+.band.a .track{animation:marq 72s linear infinite}
+.band.b .track{animation:marq 64s linear infinite reverse}
+@keyframes marq{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+
+/* 回転バッジ */
+.badge{position:fixed;left:2vw;bottom:2vw;width:clamp(78px,8vw,116px);aspect-ratio:1;z-index:35;
+  opacity:0;transition:opacity .4s;pointer-events:none}
+body.scrolled .badge{opacity:1}
+.badge svg{width:100%;height:100%;animation:spin 20s linear infinite}
+.badge text{font-family:var(--grot);font-weight:700;font-size:9.4px;letter-spacing:.9px;fill:var(--ink)}
+.badge .dot{position:absolute;inset:38%;background:var(--accent);border-radius:50%}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* 漂うトンボ */
+.dust{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.dust i{position:absolute;width:14px;height:14px;opacity:.5}
+.dust i::before,.dust i::after{content:'';position:absolute;background:var(--accent)}
+.dust i::before{width:100%;height:1.5px;top:50%}
+.dust i::after{height:100%;width:1.5px;left:50%}
+@keyframes drift{0%{transform:translate3d(0,14px,0) rotate(0)}100%{transform:translate3d(0,-14px,0) rotate(90deg)}}
+
+/* 数字のカウントアップ帯 */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:4vw;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:6vh 0;margin-top:10vh}
+.stat b{display:block;font-family:var(--grot);font-weight:800;font-size:clamp(2.6rem,7.6vw,6.4rem);
+  line-height:.9;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.stat span{display:block;font-family:var(--grot);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;margin-top:1em;color:#767676}
+
+/* カウントダウン：オレンジ地の中で黒い塊にして必ず目に入れる */
+.cdwrap{background:var(--ink);color:var(--bg);padding:clamp(1.6rem,4vw,3rem);margin-top:8vh}
+.cdlabel{font-family:var(--mincho);font-size:clamp(1.05rem,2.2vw,1.7rem);letter-spacing:.08em;line-height:1.5}
+.cdlabel b{color:var(--accent);font-weight:400}
+.cd{display:flex;align-items:flex-end;gap:clamp(.9rem,2.6vw,2.6rem);margin-top:1.4em;flex-wrap:wrap}
+.cd div{display:flex;align-items:baseline;gap:.18em}
+.cd b{font-family:var(--grot);font-weight:800;font-size:clamp(2.6rem,8vw,6.4rem);line-height:.85;
+  letter-spacing:-.05em;font-variant-numeric:tabular-nums;color:var(--accent)}
+.cd u{text-decoration:none;font-family:var(--gothic);font-weight:500;font-size:clamp(.9rem,1.8vw,1.4rem);letter-spacing:.04em}
+.cdnote{font-family:var(--grot);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;margin-top:1.6em;opacity:.55}
+/* 開催日時を過ぎたら、数字の代わりに終了のことばを出す */
+.cddone{display:none;font-family:var(--mincho);font-size:clamp(1.05rem,2.2vw,1.7rem);letter-spacing:.08em;line-height:1.7}
+.cdwrap.done .cdlabel,.cdwrap.done .cd,.cdwrap.done .cdnote{display:none}
+.cdwrap.done .cddone{display:block}
+
+/* 傾いたスタンプ */
+.stamp{display:inline-block;border:3px solid var(--ink);padding:.75em 1.2em;transform:rotate(-7deg);
+  font-family:var(--grot);font-weight:800;font-size:clamp(.8rem,1.5vw,1.15rem);letter-spacing:.02em;
+  text-transform:uppercase;line-height:1.3;margin-top:5vh;animation:wobble 5s ease-in-out infinite}
+@keyframes wobble{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(-4.4deg)}}
+
+/* CONTENTS：オレンジが左から満ちる */
+.item{position:relative;z-index:0;padding-left:clamp(.8rem,2vw,2rem);padding-right:clamp(.8rem,2vw,2rem)}
+.item::before{content:'';position:absolute;inset:0;background:var(--accent);transform:scaleX(0);
+  transform-origin:left center;transition:transform .55s cubic-bezier(.19,1,.22,1);z-index:-1}
+.item:hover::before{transform:scaleX(1)}
+.item .num{transition:transform .55s cubic-bezier(.19,1,.22,1)}
+.item:hover .num{transform:translateX(.35em)}
+
+/* STAFF：黒い枠が背後にズレて重なる */
+.sp{position:relative;z-index:0}
+.sp::after{content:'';position:absolute;inset:0;border:2px solid var(--ink);
+  transform:translate3d(14px,14px,0);transition:transform .5s cubic-bezier(.19,1,.22,1);z-index:-1}
+.staff-row:hover .sp::after{transform:translate3d(22px,22px,0)}
+
+/* PHOTO WANTED を明滅させる */
+.empty span{animation:blink 2.6s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.7}}  /* .45 だとオレンジ地で黒文字のコントラスト比が 4.5:1 を切るため .7 */
+
+/* ページ全体の進行バー */
+.pageprog{position:fixed;top:0;left:0;height:4px;background:var(--accent);width:0;z-index:45}
+
+/* 明朝のハイライト */
+.hl{background:linear-gradient(transparent 62%,var(--accent) 62%);background-size:0% 100%;
+  background-repeat:no-repeat;transition:background-size 1.1s cubic-bezier(.19,1,.22,1)}
+.hl.in{background-size:100% 100%}
+
+@media (max-width:640px){
+  /* 3項目は横並びのまま。数字を並べることで「70年・3世代・5人」が一目で比較できる */
+  .stats{grid-template-columns:repeat(3,1fr);gap:3vw;padding:5vh 0}
+  .stat b{font-size:clamp(1.9rem,9vw,3rem)}
+  .stat span{font-size:.52rem;letter-spacing:.06em;margin-top:.9em}
+  .badge{left:auto;right:2vw;bottom:74px;width:66px}
+  .band{width:132%;margin-left:-16%}
+}
+
+/* ================= 祭の装飾 ================= */
+/* 提灯 */
+.lanterns{position:relative;height:clamp(72px,9vw,120px);margin-bottom:6vh}
+.lanterns .rope{position:absolute;left:0;right:0;top:4px;height:2px;background:var(--ink)}
+.lanterns .row{position:absolute;left:0;right:0;top:5px;display:flex;justify-content:space-around;padding:0 2vw}
+.lantern{position:relative;width:clamp(26px,3.4vw,46px);height:clamp(36px,4.6vw,62px);
+  background:var(--accent);border-radius:46% / 32%;transform-origin:top center;
+  animation:swing 4.2s ease-in-out infinite;
+  background-image:repeating-linear-gradient(90deg,rgba(0,0,0,.14) 0 1px,transparent 1px 7px)}
+.lantern::before,.lantern::after{content:'';position:absolute;left:22%;width:56%;height:5px;background:var(--ink)}
+.lantern::before{top:-2px}.lantern::after{bottom:-2px}
+@keyframes swing{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+
+/* 市松の細帯 */
+.ichimatsu{height:clamp(16px,2vw,26px);
+  background:repeating-conic-gradient(var(--accent) 0% 25%, #fff 0% 50%);
+  background-size:clamp(16px,2vw,26px) clamp(16px,2vw,26px)}
+.ichimatsu.k{background:repeating-conic-gradient(var(--ink) 0% 25%, #fff 0% 50%);
+  background-size:clamp(16px,2vw,26px) clamp(16px,2vw,26px)}
+
+/* のぼり旗 */
+.nobori{position:absolute;right:2vw;top:14vh;z-index:0;pointer-events:none;
+  width:clamp(56px,6.4vw,92px);background:var(--accent);padding:1.1em .35em 1.6em;
+  animation:flutter 6s ease-in-out infinite;transform-origin:top center}
+.nobori::before{content:'';position:absolute;left:0;right:0;top:0;height:7px;background:var(--ink)}
+.nobori p{writing-mode:vertical-rl;font-family:var(--mincho);font-weight:500;
+  font-size:clamp(1.3rem,2.5vw,2.1rem);letter-spacing:.22em;line-height:1.1;margin:0 auto}
+@keyframes flutter{0%,100%{transform:rotate(-1.2deg) skewY(.4deg)}50%{transform:rotate(1.2deg) skewY(-.4deg)}}
+
+/* 紙吹雪 */
+.confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.confetti i{position:absolute;top:-6%;width:9px;height:14px;background:var(--ink);opacity:.85}
+.confetti i:nth-child(odd){background:#fff}
+@keyframes fall{0%{transform:translate3d(0,-10vh,0) rotate(0)}100%{transform:translate3d(0,110vh,0) rotate(540deg)}}
+.event{position:relative;overflow:hidden}
+.event-in{position:relative;z-index:1}
+
+/* ワンドリンク券をチケットの形に（破線＋両端の切り込み） */
+.drink{position:relative;border:2px dashed var(--ink);padding:1.1em 1.6em}
+.drink::before,.drink::after{content:'';position:absolute;top:50%;width:18px;height:18px;
+  background:var(--bg);border-radius:50%;transform:translateY(-50%)}
+.drink::before{left:-10px}.drink::after{right:-10px}
+
+@media (max-width:640px){
+  .nobori{display:none}
+}
+
+/* ================= 動きを減らす設定（OSの「視差効果を減らす」など） =================
+   すべてのアニメーションを止め、最終状態を即座に表示する。Lenis は script.js 側で起動しない。 */
+@media (prefers-reduced-motion: reduce){
+  .play .marks,.play .plate,.play .plate-ghost,.play .ch,.play .photo-wrap,.play .years,.play .foot > *,.h2.in{animation:none!important}
+  .marks{opacity:.14}.photo-wrap,.years,.h2{clip-path:inset(0)}.foot > *{opacity:1}
+  html.js .hero:not(.play) .ch{clip-path:inset(-14% -6% -14% -6%)}
+  html.js .hero:not(.play) .plate{opacity:1}
+  .sticky{position:relative;height:auto;overflow-x:auto}.rail{transform:none!important}
+  .band .track,.badge svg,.stamp,.empty span,.dust i,.lantern,.nobori,.confetti i{animation:none!important}
+  .confetti{display:none}
+  .hl{transition:none}.hl.in{background-size:100% 100%}
+  .item::before,.item .num,.sp::after,.jump,.rim,.hint,.counter,.progress,.badge{transition:none}
+}
