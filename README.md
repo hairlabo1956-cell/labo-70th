@@ -47,7 +47,7 @@
 | 8 | SEO / OGP / JSON-LD（schema.org Event）/ favicon / `<main>` ランドマーク / `loading="lazy"` / `width` `height` / `fetchpriority` を追加 | 仕様 §8 |
 | 9 | `a:focus-visible` のフォーカスリング（オレンジ、オレンジ地では黒）。補助テキストのグレーを `#8a8a8a` → `#767676`、EVENT のラベルを黒70%、PHOTO WANTED の点滅の最小濃度を .45 → .7 | 仕様 §8 コントラスト比 4.5:1（`#8a8a8a` は 3.45:1、点滅の谷は 4.0:1 だった） |
 | 10 | 駐車場の見出しを `h4` → `h3` | 見出し階層（h2 の直下に h4 があった） |
-| 11 | 地図・Instagram・LINE のリンクは支給URLを設定済み（2026-09-05） | Google マップ `maps.app.goo.gl/4xg6GBuGM25kUTJm9` ／ Instagram `@labo.1956` ／ LINE `lin.ee/qLPLJ4Aw` |
+| 11 | 地図・Instagram・LINE のリンクを設定（2026-09-05） | Google マップは支給の短縮URL（maps.app.goo.gl）だと iPhone の Google マップアプリで「サポートされていないリンク」になったため、公式の Maps URLs 形式 `google.com/maps/search/?api=1&query=店名+住所` に変更。LINE は支給の `lin.ee/qLPLJ4Aw` が実機で表示されなかった（広告ブロッカーが lin.ee を隠す可能性）ため、転送先の正式URL `line.me/R/ti/p/@zgn8493r` に変更。Instagram `@labo.1956` |
 | 12 | MESSAGE 本文の末尾に Instagram 原稿の最終行「皆さまとお会いできることを、心より楽しみにしております。」を追加 | 仕様 §5 S3「原稿をそのまま使用」。プロトタイプでは抜けていた。不要なら1行消すだけ |
 | 13 | カウントダウンが 0 になったら数字を隠し「終了しました」の一文（`.cddone`、index.html 内で編集可）を表示 | 感謝祭後に「あと0日」が残らないように。文言は仮 |
 
@@ -100,7 +100,7 @@
 **Performance 75 には未達。** 残りの主因は (a) 開幕演出でヒーロー下の情報が約3.4秒かけて現れること（Speed Index に効く。仕様で承認済みの演出）、(b) ローカルは無圧縮（公開後は Cloudflare が gzip/brotli 化）、(c) Lighthouse のモバイル想定（DPR 1.75）では写真が「大きすぎ」と判定されること（実機の高解像度画面向けにあえて大きめ）。公開URLで再計測し、必要なら hero.jpg を 480px 幅に落とす。
 
 - **モバイルエンジン検証（2026-09-05、Playwright）**：WebKit（iPhone 14 エミュレーション）と Chromium（Pixel 7 エミュレーション）で、MESSAGE 本文の計算済みフォントが Shippori Mincho、ヒーロー写真と年表写真の画素が紺（平均 R114 G121 B170、紺判定 80〜91%、グレー 1〜5%）、帯2本が −2.4°／+1.8° で25px重なって交差、横スワイプの年表・タップの鏡・カウントダウンが動作、JS エラーなし。
-- **未実施：iPhone / Android の実機**。エンジン検証は実機の代替にはならないため、公開後に必ず実機で確認する（仕様 §6-5）。特に iOS 26 Safari でヒーロー写真が紺になっているか。
+- **実機確認（2026-09-05、発注者の iPhone・Safari）**：ヒーロー写真の紺デュオトーン、本文の明朝体、帯の交差、区切り記号（絵文字化なし）の4点と、修正後の地図・LINEリンクの動作を確認済み。Android 実機は未確認。
 
 ローカルで見るには、このフォルダで `npx http-server -p 8137` を実行して `http://localhost:8137/` を開く。
 
@@ -109,16 +109,22 @@
 - GitHub：https://github.com/hairlabo1956-cell/labo-70th（Public、ブランチ main）
 - Cloudflare Pages：プロジェクト `labo-70th`（アカウント hair.labo.1956@gmail.com）。GitHub App の権限は labo-70th のみ。main への保存で自動デプロイ。
 - 公開URL：**https://labo-70th.pages.dev/**（brotli 圧縮あり。HTML 34KB→9.7KB）
-- `robots.txt` を追加（無いと 404 ページの HTML が返り、Lighthouse の SEO が 92 になる）
+- `robots.txt` を追加（無いと 404 ページの HTML が返り、Lighthouse の SEO が 92 になる）。追加のコミットは約1分半で自動デプロイされ、SEO 100 を確認
 
 公開URLでの Lighthouse（モバイル、2026-09-05）：
 
 | 方式 | Performance | Accessibility | SEO | Best Practices | FCP | LCP | TBT | observed FCP / LCP |
 |---|---|---|---|---|---|---|---|---|
-| simulate（既定） | **77** | 100 | 92→robots.txt追加後に再計測 | 100 | 3.4 s | 4.0 s | 0 ms | 1.3 s / 2.7 s |
+| simulate（既定） | **77** | 100 | 100（robots.txt 追加後） | 100 | 3.4 s | 4.0 s | 0 ms | 1.3 s / 2.7 s |
 | devtools（実スロットリング） | 61 | 100 | 92 | 100 | 3.1 s | 3.1 s | 860 ms | 3.1 s / 3.1 s |
 
 LCP の実測：回線制限なし 0.36 s（スマホ相当）、Lighthouse 既定の観測値 2.7 s、低速4G＋CPU4倍の実スロットリング 3.1 s。通常回線では 2.5 秒以内、最悪条件では超える。
+
+## Phase 5（納品条件）の記録
+
+- 2026-09-05 16:38：発注者自身が PC の Chrome で GitHub の編集画面を開き、index.html の DJ の文に「テスト」を追記して保存 → 約1〜2分で https://labo-70th.pages.dev/ に反映されることを確認。
+- 同日 16:41：発注者自身が「テスト」を削除して保存 → 元に戻ることを確認。**仕様 §10 の Phase 5 完了＝納品。**
+- 注意：Claude アプリ内の簡易ブラウザや iPhone の Safari では GitHub のエディタにカーソルが入らず編集できない。編集は PC の Chrome で行う（編集マニュアルにも記載）。
 
 ## 公開手順（Phase 4：実施済み。再構築する場合の記録）
 
