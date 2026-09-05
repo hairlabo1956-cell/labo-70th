@@ -69,6 +69,7 @@
 | 21 | **デュオトーンの filter と mix-blend-mode を別要素に分離**（img に `filter:grayscale(1)`、その親 `.tone` / `.layer.base` に `mix-blend-mode:screen`）。ヒーローは HTML に `.tone` を置き、STAFF の写真は script.js が包む | iOS 26 Safari に「同じ画像に filter と mix-blend-mode を掛けるとフィルタだけ効いて合成されない」既知の不具合（Safari 26.0 で修正とされたが iOS 26.3 でも再現報告あり）。別要素に分ければ該当しない |
 | 22 | 帯（マーキー）とバッジの区切り記号を「✳」(U+2733) → 「✱」(U+2731 HEAVY ASTERISK) に置き換え。帯は script.js が ✳ を自動で ✱ に直す | U+2733 は絵文字にもなる文字で、WebKit（Playwright の Windows 版）では U+FE0E を付けても緑の絵文字で描かれた。U+2731 は絵文字の性質を持たないので、どの端末でも文字として描かれる。見た目はほぼ同じ |
 | 23 | 見出しのオレンジの版ズレゴースト（`.gh::before`）を非表示 | 発注者判断（2026-09-05）。CSS の `display:none` を消せば復活 |
+| 24 | 日本語の見出し（MESSAGE「70年分のありがとうを。」、CONTENTS「当日の内容」）を Archivo（ゴシック代替）→ Shippori Mincho 400、行間 1.25 に変更（`.h2.jp`） | 発注者判断（2026-09-05）。ヒーローのキャッチと同じ明朝にして「極太欧文×細い明朝」の2声に揃える。欧文の見出しは Archivo のまま |
 | 20 | `measure()`（HISTORYの高さ計算）を150msにまとめる。`update()` は「読んでから書く」順に固定。ヒーロー画像の `<link rel=preload>` を外す（img 自体が body 先頭にあり `fetchpriority=high` で同等） | フォント到着ごとの強制レイアウト連発（TBT）と、Lighthouse の FCP 依存グラフの肥大を避ける |
 
 ## 画像処理の記録

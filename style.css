@@ -44,6 +44,8 @@ html.lenis,html.lenis body{height:auto}
 .h2.in{animation:rise 1s cubic-bezier(.19,1,.22,1) both}
 @keyframes rise{0%{clip-path:inset(108% -6% -14% -6%);transform:translate3d(0,.18em,0)}
 100%{clip-path:inset(-14% -6% -14% -6%);transform:none}}
+/* 日本語の見出し（class="h2 jp"）はヒーローのキャッチと同じ明朝。発注者判断（2026-09-05）。欧文の見出しは Archivo のまま */
+.h2.jp{font-family:var(--mincho);font-weight:400;text-transform:none;font-size:clamp(1.8rem,5.2vw,4.4rem);line-height:1.25;letter-spacing:.01em}
 .sub{font-family:var(--grot);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#767676;margin-bottom:1.6em}
 .body{font-family:var(--mincho);font-size:clamp(.98rem,1.32vw,1.14rem);line-height:2.15;max-width:33em}
 .body p+p{margin-top:1.7em}
