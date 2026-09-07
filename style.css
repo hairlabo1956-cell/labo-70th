@@ -404,6 +404,21 @@ body.scrolled .badge{opacity:1}
   .nobori{display:none}
 }
 
+/* ================= REPORT：当日の記録（感謝祭のあとに表示） =================
+   当日の写真はデュオトーン処理も鏡の演出もかけない（そのままの色で並べる）。
+   .rshot は HISTORY の .shot とは別物。1枚（<div>…</div>）をコピーすれば増やせる。 */
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:clamp(14px,1.8vw,26px);margin-top:7vh;align-items:start}
+.rshot{position:relative;overflow:hidden;aspect-ratio:4/3;background:#f2f2f2}
+.rshot.tall{aspect-ratio:3/4}
+.rshot img{width:100%;height:100%;object-fit:cover;display:block}
+.rgrid .empty{aspect-ratio:4/3}
+.rgrid .empty.tall{aspect-ratio:3/4}
+.rcap{font-family:var(--grot);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;
+  color:#767676;margin-top:.8em}
+.rnote{margin-top:6vh;border-left:5px solid var(--accent);padding:.4em 0 .4em 1.5em;
+  font-size:.92rem;line-height:2.1;max-width:38em}
+
 /* ================= 動きを減らす設定（OSの「視差効果を減らす」など） =================
    すべてのアニメーションを止め、最終状態を即座に表示する。Lenis は script.js 側で起動しない。 */
 @media (prefers-reduced-motion: reduce){
