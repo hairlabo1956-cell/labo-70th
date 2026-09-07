@@ -256,6 +256,9 @@
     shot.addEventListener('touchend',end);
   });
 
+  /* ---- CONTENTS の写真（任意）：.pic が入っている項目に印を付ける（:has() が使えないブラウザ向け） ---- */
+  doc.querySelectorAll('.item').forEach(function(it){ if(it.querySelector('.pic')) it.classList.add('has-pic'); });
+
   /* ---- STAFF の写真枠：<img> が入っていれば紺のデュオトーン表示に切り替える ---- */
   doc.querySelectorAll('.sp').forEach(function(sp){
     var img=sp.querySelector('img'); if(!img) return;
