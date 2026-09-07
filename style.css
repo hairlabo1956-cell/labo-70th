@@ -272,7 +272,7 @@ body.scrolled .jump{transform:translateX(-50%) translateY(0)}
 .band.a{background:var(--accent);color:var(--ink);transform:rotate(-2.4deg)}
 .band.b{background:var(--ink);color:var(--bg);transform:rotate(1.8deg);margin-top:-.4em}
 .track{display:inline-flex;font-family:var(--grot);font-weight:800;text-transform:uppercase;
-  font-size:clamp(1.15rem,3vw,2.6rem);letter-spacing:-.02em;will-change:transform}
+  font-size:clamp(1.15rem,3vw,2.6rem);letter-spacing:-.02em}  /* will-change は外した（iOS Safari で巨大な合成レイヤーになり帯が欠けるため） */
 .track span{padding-right:.55em}
 .band.a .track{animation:marq 72s linear infinite}
 .band.b .track{animation:marq 64s linear infinite reverse}
