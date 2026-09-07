@@ -266,6 +266,48 @@
     if(!img.parentElement.classList.contains('tone')){ var t=doc.createElement('div'); t.className='tone'; img.parentNode.insertBefore(t,img); t.appendChild(img); }
   });
 
+  /* ---- ① 風（ドライヤー）：スクロールの速さ→風の強さ。提灯・紙吹雪・トンボ・のぼり・スタンプが風向きに流れ、止まると収まる ----
+     rotate / translate（transform とは別に合成される個別プロパティ）に書くので、既存の揺れのアニメーションと共存する */
+  if(!reduced){
+    var lanterns=[],confetti=[],dust=[],nobori=doc.querySelector('.nobori'),stamp=doc.querySelector('.stamp');
+    var collect=function(){
+      lanterns=[].slice.call(doc.querySelectorAll('.lantern')).map(function(el,i){return {el:el,k:0.8+((i*7)%5)/10};});
+      confetti=[].slice.call(doc.querySelectorAll('.confetti i')).map(function(el,i){return {el:el,k:0.6+((i*13)%9)/10};});
+      dust=[].slice.call(doc.querySelectorAll('.dust i')).map(function(el,i){return {el:el,k:0.5+((i*5)%6)/10};});
+    };
+    collect();
+    var windLastY=window.scrollY, wind=0, windShown=0;
+    var windFrame=function(){
+      var y=window.scrollY, v=y-windLastY; windLastY=y;
+      var target=Math.max(-1,Math.min(1,v/28));          /* 1フレームに28px以上の速さで最大風力 */
+      wind+=(target-wind)*(Math.abs(target)>Math.abs(wind)?0.25:0.05);   /* 吹き始めは速く、収まりはゆっくり */
+      if(Math.abs(wind)<0.002) wind=0;
+      if(wind!==windShown){
+        windShown=wind; var i;
+        for(i=0;i<lanterns.length;i++) lanterns[i].el.style.rotate=(-wind*26*lanterns[i].k)+'deg';
+        for(i=0;i<confetti.length;i++) confetti[i].el.style.translate=(wind*170*confetti[i].k)+'px 0';
+        for(i=0;i<dust.length;i++) dust[i].el.style.translate=(wind*60*dust[i].k)+'px 0';
+        if(nobori) nobori.style.rotate=(-wind*14)+'deg';
+        if(stamp) stamp.style.rotate=(-wind*6)+'deg';
+      }
+      requestAnimationFrame(windFrame);
+    };
+    requestAnimationFrame(windFrame);
+  }
+
+  /* ---- ③ 梳く（コーム）：写真が画面に入る時、コームの歯が通り過ぎながら現れる ----
+     写真枠の上に覆い（.comb）を重ね、枠が画面に入ったら右へ抜けさせる */
+  if(!reduced){
+    var combHosts=[].slice.call(doc.querySelectorAll('.shot.live, .sp.has-img, .item .pic, .shop .sphoto, .rshot'));
+    combHosts.forEach(function(t){ var c=doc.createElement('i'); c.className='comb'; c.setAttribute('aria-hidden','true'); t.appendChild(c); });
+    if('IntersectionObserver' in window){
+      var ioComb=new IntersectionObserver(function(es){
+        es.forEach(function(e){ if(e.isIntersecting){ var c=e.target.querySelector(':scope > .comb'); if(c) c.classList.add('in'); ioComb.unobserve(e.target); } });
+      },{threshold:.35});
+      combHosts.forEach(function(t){ ioComb.observe(t); });
+    } else { combHosts.forEach(function(t){ var c=t.querySelector(':scope > .comb'); if(c) c.classList.add('in'); }); }
+  }
+
   /* ---- 固定ボタン「開催概要を見る」 ---- */
   var jump=doc.querySelector('.jump');
   if(jump) jump.addEventListener('click',function(e){

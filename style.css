@@ -403,7 +403,7 @@ body.scrolled .badge{opacity:1}
 
 /* 紙吹雪 */
 .confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-.confetti i{position:absolute;top:-6%;width:9px;height:14px;background:var(--duotone);opacity:.85}
+.confetti i{position:absolute;top:-6%;width:2px;height:18px;background:var(--duotone);opacity:.85}  /* ④ 紙吹雪は「切り落とした髪の断片」＝細い線（2026-09-07 発注者採用） */
 .confetti i:nth-child(odd){background:#fff}
 @keyframes fall{0%{transform:translate3d(0,-10vh,0) rotate(0)}100%{transform:translate3d(0,110vh,0) rotate(540deg)}}
 .event{position:relative;overflow:hidden}
@@ -434,6 +434,22 @@ body.scrolled .badge{opacity:1}
 .rnote{margin-top:6vh;border-left:5px solid var(--accent);padding:.4em 0 .4em 1.5em;
   font-size:.92rem;line-height:2.1;max-width:38em}
 
+/* ================= 美容室の道具の性質を動きに（2026-09-07 発注者採用。試作ページで比較して決定） =================
+   ① 風（ドライヤー）：スクロールの速さを風の強さにして、提灯・紙吹雪・トンボ・のぼり・スタンプが風向きに流れる。値は script.js が毎フレーム rotate / translate に書く
+   ③ 梳く（コーム）：写真が画面に入る時、コームの歯（オレンジの細い縦縞）が右へ抜けながら写真が現れる
+   ④ 髪（ハサミ）：紙吹雪を切り落とした髪の断片に（上の .confetti i） */
+.lantern,.nobori,.stamp{transform-origin:top center}
+.confetti i,.dust i{will-change:transform}
+.item .pic,.shop .sphoto{position:relative}
+.comb{position:absolute;top:0;bottom:0;left:0;width:200%;z-index:6;pointer-events:none;
+  --cover:var(--bg);
+  background-image:repeating-linear-gradient(90deg,var(--accent) 0 3px,transparent 3px 13px),linear-gradient(90deg,transparent 0 50%,var(--cover) 50%);
+  background-size:50% 100%,100% 100%;background-repeat:no-repeat;
+  transform:translate3d(-50%,0,0)}
+.shot .comb,.sp .comb{--cover:var(--duotone)}
+.comb.in{animation:comb 1.15s cubic-bezier(.19,1,.22,1) forwards}
+@keyframes comb{to{transform:translate3d(50%,0,0)}}
+
 /* ================= 動きを減らす設定（OSの「視差効果を減らす」など） =================
    すべてのアニメーションを止め、最終状態を即座に表示する。Lenis は script.js 側で起動しない。 */
 @media (prefers-reduced-motion: reduce){
@@ -444,6 +460,7 @@ body.scrolled .badge{opacity:1}
   .sticky{position:relative;height:auto;overflow-x:auto}.rail{transform:none!important}
   .band .track,.badge svg,.stamp,.empty span,.dust i,.lantern,.nobori,.confetti i{animation:none!important}
   .confetti{display:none}
+  .comb{display:none!important}
   .hl{transition:none}.hl.in{background-size:100% 100%}
   .item::before,.item .num,.sp::after,.jump,.rim,.hint,.counter,.progress,.badge{transition:none}
 }
