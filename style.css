@@ -26,7 +26,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--gothic);-webkit-fon
 img{display:block;max-width:100%}
 a{color:inherit}
 a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-.event a:focus-visible{outline-color:var(--ink)}
+.event a:focus-visible{outline-color:var(--duotone)}
 
 /* Lenis（慣性スクロール）の推奨設定 */
 html.lenis,html.lenis body{height:auto}
@@ -49,7 +49,7 @@ html.lenis,html.lenis body{height:auto}
 .sub{font-family:var(--grot);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#767676;margin-bottom:1.6em}
 .body{font-family:var(--mincho);font-size:clamp(.98rem,1.32vw,1.14rem);line-height:2.15;max-width:33em}
 .body p+p{margin-top:1.7em}
-.tag{display:inline-block;margin-left:.6em;vertical-align:.3em;font-family:var(--grot);font-weight:600;font-size:.56rem;letter-spacing:.1em;background:var(--accent);color:var(--ink);padding:.35em .7em}
+.tag{display:inline-block;margin-left:.6em;vertical-align:.3em;font-family:var(--grot);font-weight:600;font-size:.56rem;letter-spacing:.1em;background:var(--accent);color:var(--duotone);padding:.35em .7em}
 
 /* ================= ヒーロー ================= */
 .hero{position:relative;min-height:100svh;padding:4.5vh 4vw;display:grid;grid-template-rows:auto 1fr auto;overflow:hidden}
@@ -92,7 +92,7 @@ html.js .hero:not(.play) .plate{opacity:0}
 .staff-row{display:grid;grid-template-columns:minmax(0,42%) minmax(0,58%);gap:clamp(24px,4vw,64px);align-items:center;margin-top:9vh}
 .staff-row:nth-child(even) .sp{order:2}
 .sp{position:relative;aspect-ratio:4/5;background:var(--accent);display:flex;align-items:center;justify-content:center;overflow:hidden}
-.sp span{font-family:var(--grot);font-weight:700;font-size:.66rem;letter-spacing:.14em;text-align:center;line-height:2}
+.sp span{font-family:var(--grot);font-weight:700;font-size:.66rem;letter-spacing:.14em;text-align:center;line-height:2;color:var(--duotone)}
 /* 写真が入ると、オレンジの枠が紺のデュオトーン写真に変わる */
 .sp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1);z-index:1}
 .sp .tone{position:absolute;inset:0;mix-blend-mode:screen;z-index:1}
@@ -127,7 +127,7 @@ html.js .hero:not(.play) .plate{opacity:0}
 .shot.active .rim{opacity:1}
 /* 写真待ちの枠（PHOTO WANTED）。中に <img> を入れると自動で写真枠になる */
 .empty{background:var(--accent);display:flex;align-items:center;justify-content:center;text-align:center}
-.empty span{font-family:var(--grot);font-weight:700;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;line-height:2}
+.empty span{font-family:var(--grot);font-weight:700;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;line-height:2;color:var(--duotone)}
 .shot.empty{background:var(--accent)}
 .shot.empty.has-img,.shot.empty:has(img){background:var(--duotone)}
 .shot img ~ span,.shot:has(img) span{display:none}
@@ -142,7 +142,7 @@ body.inhistory .counter,body.inhistory .progress{opacity:1}
 .history.moved .hint{opacity:0}
 
 /* ================= EVENT ================= */
-.event{background:var(--accent);padding:14vh 6vw;margin-top:4vh}
+.event{background:var(--accent);padding:14vh 6vw;margin-top:4vh;color:var(--duotone)}  /* オレンジ地の文字は紺（発注者判断 2026-09-07。黒だとハロウィン感、白は 2.1:1 で読めない。紺は 5.6:1） */
 .event-in{max-width:1040px;margin:0 auto}
 .event .date{font-family:var(--grot);font-weight:800;font-size:clamp(2.6rem,10vw,9rem);line-height:.86;letter-spacing:-.04em}
 .event .hours{font-family:var(--grot);font-weight:600;font-size:clamp(1.1rem,3vw,2.4rem);letter-spacing:-.02em;margin-top:.3em}
@@ -157,8 +157,13 @@ body.inhistory .counter,body.inhistory .progress{opacity:1}
 .num{font-family:var(--grot);font-weight:800;font-size:1rem;letter-spacing:.02em;padding-top:.35em}
 .item h3{font-family:var(--grot);font-weight:800;font-size:clamp(1.3rem,2.6vw,2.2rem);letter-spacing:-.025em;text-transform:uppercase}
 .item p{font-family:var(--mincho);line-height:2.05;margin-top:1.1em;max-width:34em;font-size:clamp(.9rem,1.15vw,1.02rem)}
-.shops{margin-top:1.6em;display:grid;gap:.9em;max-width:38em}
-.shop{display:grid;grid-template-columns:minmax(7rem,auto) 1fr;gap:1.4em;font-size:clamp(.86rem,1.1vw,.98rem);line-height:1.7;padding-bottom:.9em;border-bottom:1px dotted #d5d5d5}
+/* 出店者リスト：店ごとのブロック（写真は任意）。幅いっぱいに並べ、PCでは2〜3列、スマホでは1列 */
+.shops{margin-top:1.6em;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.4em 2em;max-width:none}
+.shop{display:block;font-size:clamp(.86rem,1.1vw,.98rem);line-height:1.7;padding-bottom:.9em;border-bottom:1px dotted #d5d5d5}
+.shop .sphoto{aspect-ratio:4/3;overflow:hidden;background:#f2f2f2;margin-bottom:.8em}
+.shop .sphoto img{width:100%;height:100%;object-fit:cover;display:block}
+.shop b{display:block}
+.shop span{display:block;margin-top:.25em}
 .shop b{font-family:var(--grot);font-weight:700;letter-spacing:-.01em}
 .shop em{font-style:normal;color:#767676;font-family:var(--grot);font-size:.78em}
 .drink{margin-top:1.8em;display:inline-block;background:var(--accent);padding:.9em 1.3em;font-size:.9rem;line-height:1.7;font-weight:500}
@@ -259,7 +264,7 @@ body.scrolled .jump{transform:translateX(-50%) translateY(0)}
   .num{padding-top:0}
   .event dl{grid-template-columns:1fr;gap:.4em 0}
   .event dt{padding-top:1.4em}
-  .shop{grid-template-columns:1fr;gap:.2em}
+  .shops{grid-template-columns:1fr;gap:1.2em}
 }
 
 /* ================= 装飾・演出 ================= */
@@ -278,7 +283,7 @@ body.scrolled .jump{transform:translateX(-50%) translateY(0)}
 /* 流れる帯（マーキー）：1フレーズが流れきるまで約9秒 */
 .bands{position:relative;padding:7vh 0;overflow:hidden}
 .band{overflow:hidden;white-space:nowrap;padding:.55em 0;width:118%;margin-left:-9%}
-.band.a{background:var(--accent);color:var(--ink);transform:rotate(-2.4deg)}
+.band.a{background:var(--accent);color:var(--duotone);transform:rotate(-2.4deg)}
 .band.b{background:var(--ink);color:var(--bg);transform:rotate(1.8deg);margin-top:-.4em}
 .track{display:inline-flex;font-family:var(--grot);font-weight:800;text-transform:uppercase;
   font-size:clamp(1.15rem,3vw,2.6rem);letter-spacing:-.02em}  /* will-change は外した（iOS Safari で巨大な合成レイヤーになり帯が欠けるため） */
@@ -311,7 +316,7 @@ body.scrolled .badge{opacity:1}
 .stat span{display:block;font-family:var(--grot);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;margin-top:1em;color:#767676}
 
 /* カウントダウン：オレンジ地の中で黒い塊にして必ず目に入れる */
-.cdwrap{background:var(--ink);color:var(--bg);padding:clamp(1.6rem,4vw,3rem);margin-top:8vh}
+.cdwrap{background:var(--duotone);color:var(--bg);padding:clamp(1.6rem,4vw,3rem);margin-top:8vh}
 .cdlabel{font-family:var(--mincho);font-size:clamp(1.05rem,2.2vw,1.7rem);letter-spacing:.08em;line-height:1.5}
 .cdlabel b{color:var(--accent);font-weight:400}
 .cd{display:flex;align-items:flex-end;gap:clamp(.9rem,2.6vw,2.6rem);margin-top:1.4em;flex-wrap:wrap}
@@ -326,7 +331,7 @@ body.scrolled .badge{opacity:1}
 .cdwrap.done .cddone{display:block}
 
 /* 傾いたスタンプ */
-.stamp{display:inline-block;border:3px solid var(--ink);padding:.75em 1.2em;transform:rotate(-7deg);
+.stamp{display:inline-block;border:3px solid var(--duotone);padding:.75em 1.2em;transform:rotate(-7deg);
   font-family:var(--grot);font-weight:800;font-size:clamp(.8rem,1.5vw,1.15rem);letter-spacing:.02em;
   text-transform:uppercase;line-height:1.3;margin-top:5vh;animation:wobble 5s ease-in-out infinite}
 @keyframes wobble{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(-4.4deg)}}
@@ -336,6 +341,7 @@ body.scrolled .badge{opacity:1}
 .item::before{content:'';position:absolute;inset:0;background:var(--accent);transform:scaleX(0);
   transform-origin:left center;transition:transform .55s cubic-bezier(.19,1,.22,1);z-index:-1}
 .item:hover::before{transform:scaleX(1)}
+.item:hover{color:var(--duotone)}
 .item .num{transition:transform .55s cubic-bezier(.19,1,.22,1)}
 .item:hover .num{transform:translateX(.35em)}
 
@@ -369,13 +375,13 @@ body.scrolled .badge{opacity:1}
 /* ================= 祭の装飾 ================= */
 /* 提灯 */
 .lanterns{position:relative;height:clamp(72px,9vw,120px);margin-bottom:6vh}
-.lanterns .rope{position:absolute;left:0;right:0;top:4px;height:2px;background:var(--ink)}
+.lanterns .rope{position:absolute;left:0;right:0;top:4px;height:2px;background:var(--duotone)}
 .lanterns .row{position:absolute;left:0;right:0;top:5px;display:flex;justify-content:space-around;padding:0 2vw}
 .lantern{position:relative;width:clamp(26px,3.4vw,46px);height:clamp(36px,4.6vw,62px);
   background:var(--accent);border-radius:46% / 32%;transform-origin:top center;
   animation:swing 4.2s ease-in-out infinite;
   background-image:repeating-linear-gradient(90deg,rgba(0,0,0,.14) 0 1px,transparent 1px 7px)}
-.lantern::before,.lantern::after{content:'';position:absolute;left:22%;width:56%;height:5px;background:var(--ink)}
+.lantern::before,.lantern::after{content:'';position:absolute;left:22%;width:56%;height:5px;background:var(--duotone)}
 .lantern::before{top:-2px}.lantern::after{bottom:-2px}
 @keyframes swing{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
 
@@ -390,21 +396,21 @@ body.scrolled .badge{opacity:1}
 .nobori{position:absolute;right:2vw;top:14vh;z-index:0;pointer-events:none;
   width:clamp(56px,6.4vw,92px);background:var(--accent);padding:1.1em .35em 1.6em;
   animation:flutter 6s ease-in-out infinite;transform-origin:top center}
-.nobori::before{content:'';position:absolute;left:0;right:0;top:0;height:7px;background:var(--ink)}
-.nobori p{writing-mode:vertical-rl;font-family:var(--mincho);font-weight:500;
+.nobori::before{content:'';position:absolute;left:0;right:0;top:0;height:7px;background:var(--duotone)}
+.nobori p{writing-mode:vertical-rl;font-family:var(--mincho);font-weight:500;color:var(--duotone);
   font-size:clamp(1.3rem,2.5vw,2.1rem);letter-spacing:.22em;line-height:1.1;margin:0 auto}
 @keyframes flutter{0%,100%{transform:rotate(-1.2deg) skewY(.4deg)}50%{transform:rotate(1.2deg) skewY(-.4deg)}}
 
 /* 紙吹雪 */
 .confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-.confetti i{position:absolute;top:-6%;width:9px;height:14px;background:var(--ink);opacity:.85}
+.confetti i{position:absolute;top:-6%;width:9px;height:14px;background:var(--duotone);opacity:.85}
 .confetti i:nth-child(odd){background:#fff}
 @keyframes fall{0%{transform:translate3d(0,-10vh,0) rotate(0)}100%{transform:translate3d(0,110vh,0) rotate(540deg)}}
 .event{position:relative;overflow:hidden}
 .event-in{position:relative;z-index:1}
 
 /* ワンドリンク券をチケットの形に（破線＋両端の切り込み） */
-.drink{position:relative;border:2px dashed var(--ink);padding:1.1em 1.6em}
+.drink{position:relative;border:2px dashed var(--duotone);color:var(--duotone);padding:1.1em 1.6em}
 .drink::before,.drink::after{content:'';position:absolute;top:50%;width:18px;height:18px;
   background:var(--bg);border-radius:50%;transform:translateY(-50%)}
 .drink::before{left:-10px}.drink::after{right:-10px}
