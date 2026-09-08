@@ -90,6 +90,7 @@ html.js .hero:not(.play) .plate{opacity:0}
 
 /* ================= STAFF ================= */
 .staff-row{display:grid;grid-template-columns:minmax(0,42%) minmax(0,58%);gap:clamp(24px,4vw,64px);align-items:center;margin-top:9vh}
+.staff-row:nth-child(even){grid-template-columns:minmax(0,58%) minmax(0,42%)}  /* 写真が右に来る行も写真は42%幅（order だけの入れ替えだと写真が58%幅になり行ごとに大きさが変わった。2026-09-08） */
 .staff-row:nth-child(even) .sp{order:2}
 .sp{position:relative;aspect-ratio:4/5;background:var(--accent);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .sp span{font-family:var(--grot);font-weight:700;font-size:.66rem;letter-spacing:.14em;text-align:center;line-height:2;color:var(--duotone)}
@@ -239,7 +240,7 @@ body.scrolled .jump{transform:translateX(-50%) translateY(0)}
   .hint .mouse{display:none}.hint .touch{display:inline}
   .staff-row{grid-template-columns:1fr;gap:2.4vh;margin-top:7vh}
   .staff-row:nth-child(even) .sp{order:0}
-  .sp{aspect-ratio:3/2}
+  .sp{aspect-ratio:1/1}  /* 3:2 だと人物写真の頭が切れるため正方形に（2026-09-08、スタッフ写真支給時） */
 }
 @media (max-width:640px){
   .sec{padding:11vh 7vw}
