@@ -107,6 +107,8 @@ html.js .hero:not(.play) .plate{opacity:0}
 .st-name{font-family:var(--grot);font-weight:800;font-size:clamp(1.3rem,2.4vw,2.1rem);letter-spacing:-.02em;text-transform:uppercase}
 .st-role{font-family:var(--grot);font-size:.72rem;letter-spacing:.14em;color:#767676;margin-top:.7em;text-transform:uppercase}
 .st-text{font-family:var(--mincho);font-size:clamp(.94rem,1.2vw,1.06rem);line-height:2.1;margin-top:1.5em;max-width:30em}
+.st-text + .st-text{margin-top:1em}  /* 段落が2つある人（2026-10-02） */
+.st-text:empty{display:none}  /* ひとことが未記入の人 */
 
 /* ================= HISTORY ================= */
 .history{position:relative}
