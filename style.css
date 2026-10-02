@@ -155,6 +155,14 @@ body.inhistory .counter,body.inhistory .progress{opacity:1}
 .event dt{font-family:var(--grot);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;padding-top:.5em}
 .event .free{font-family:var(--grot);font-weight:800;font-size:clamp(1.2rem,3.4vw,2.6rem);letter-spacing:-.02em;margin-top:6vh;line-height:1.25}
 .event .fine{font-size:.82rem;line-height:1.9;margin-top:2em;max-width:44em;opacity:.8}
+/* 参加方法（2026-10-02 追加）。オレンジ地なので文字・線・リンクは紺 */
+.event .join{margin-top:5vh;max-width:44em;border-top:2px solid var(--duotone);padding-top:1.4em;font-size:clamp(.9rem,1.2vw,1.05rem);line-height:1.95}
+.event .join p + p{margin-top:.5em}
+.event .join .join-h{font-family:var(--grot);font-weight:800;font-size:.78rem;letter-spacing:.14em;margin-bottom:.4em}
+.event .join b{font-weight:700}
+.event .join a{color:var(--duotone);font-weight:700;text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:2px}
+/* 当日の内容のリード文（2026-10-02 追加） */
+#contents .lead{font-family:var(--mincho);font-size:clamp(1rem,1.5vw,1.2rem);line-height:1.9;margin-top:3vh}
 
 /* ================= CONTENTS ================= */
 .item{border-top:1px solid #e0e0e0;padding:5vh 0;display:grid;grid-template-columns:5.5rem 1fr;gap:2vw}
@@ -286,7 +294,7 @@ body.scrolled .jump{transform:translateX(-50%) translateY(0)}
   pointer-events:none;user-select:none;z-index:0}
 .wrapsec > .sec{position:relative;z-index:1}
 
-/* 流れる帯（マーキー）：1フレーズが流れきるまで約9秒 */
+/* 流れる帯（マーキー）：1フレーズが流れきるまで約18秒（2026-10-02 発注者指示で 9秒→18秒、黒は 8秒→16秒） */
 .bands{position:relative;padding:7vh 0;overflow:hidden}
 .band{overflow:hidden;white-space:nowrap;padding:.55em 0;width:118%;margin-left:-9%}
 .band.a{background:var(--accent);color:var(--duotone);transform:rotate(-2.4deg)}
@@ -294,8 +302,8 @@ body.scrolled .jump{transform:translateX(-50%) translateY(0)}
 .track{display:inline-flex;font-family:var(--grot);font-weight:800;text-transform:uppercase;
   font-size:clamp(1.15rem,3vw,2.6rem);letter-spacing:-.02em}  /* will-change は外した（iOS Safari で巨大な合成レイヤーになり帯が欠けるため） */
 .track span{padding-right:.55em}
-.band.a .track{animation:marq 72s linear infinite}
-.band.b .track{animation:marq 64s linear infinite reverse}
+.band.a .track{animation:marq 144s linear infinite}
+.band.b .track{animation:marq 128s linear infinite reverse}  /* JSが動かない時の予備。速さは script.js の perPhrase で決まる（2026-10-02 に半分の速さへ） */
 @keyframes marq{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
 
 /* 回転バッジ */

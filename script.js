@@ -97,11 +97,11 @@
   /* ---- 流れる帯（同じ文字列を2周分並べて途切れなく流す） ----
      帯の幅に必要な回数だけ文字列を並べる（プロトタイプの固定16回だと幅が3万px前後になり、
      iOS Safari では動いている最中に未描画の部分が画面に入って帯の一部が消える）。
-     速さはプロトタイプと同じ「1フレーズ約9秒（黒い帯は8秒）」になるよう、回数から再生時間を決める。 */
+     速さは「1フレーズ約18秒（黒い帯は16秒）」になるよう、回数から再生時間を決める（2026-10-02 発注者指示で プロトタイプの 9秒/8秒 から半分の速さに。速さを変える時は下の 16 と 18 を変える。大きいほどゆっくり）。 */
   doc.querySelectorAll('.track').forEach(function(t){
     /* 区切り記号の「✳」(U+2733) は端末によって緑色の絵文字で描かれるため、絵文字扱いされない「✱」(U+2731) に置き換えて描く */
     var txt=(t.dataset.loop||t.textContent.trim()).replace(/✳︎?/g,'✱');
-    var band=t.parentElement, perPhrase=(band&&band.classList.contains('b'))?8:9, lastW=0;
+    var band=t.parentElement, perPhrase=(band&&band.classList.contains('b'))?16:18, lastW=0;
     function build(){
       var bw=band?band.getBoundingClientRect().width:window.innerWidth;
       if(Math.abs(bw-lastW)<40) return;          /* iOSのアドレスバー開閉などの高さ変化では組み直さない */
