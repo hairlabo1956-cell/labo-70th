@@ -250,6 +250,7 @@
      ========================================================= */
   function layout(){
     vh=window.innerHeight; vw=window.innerWidth;
+    if(typeof odoPin!=='undefined') odoPin.style.setProperty('--oh',odoSticky.offsetHeight+'px');
     if(gallery){ gallery.size(); wPin.style.height=(vh+gallery.travel*1.25+vh*.25)+'px'; }
     sheetPin.style.height=(vh*(slides.length+.4))+'px';
     if(strip) strip.size();
@@ -260,10 +261,11 @@
   var heroCards=[].slice.call(doc.querySelectorAll('.hc')), heroWrap=doc.querySelector('.hero-type-wrap'), blTrack=doc.getElementById('blTrack');
   var concept=doc.getElementById('message');
   /* 1956 → 2026 の回転式カウンター */
-  var odoPin=doc.getElementById('odoPin'), odoBar=doc.getElementById('odoBar').parentNode, odoJp=doc.getElementById('odoJp'), lastYear=-1;
+  var odoPin=doc.getElementById('odoPin'), odoSticky=odoPin.querySelector('.odo-sticky'), odoBar=doc.getElementById('odoBar').parentNode, odoJp=doc.getElementById('odoJp'), lastYear=-1;
   var cols=[].map.call(doc.querySelectorAll('#odo .dg'),function(d){ var c=doc.createElement('span'); c.className='dg-col'; for(var n=0;n<10;n++){ var s=doc.createElement('span'); s.textContent=n; c.appendChild(s); } d.appendChild(c); return c; });
   function setYear(y){ if(y===lastYear) return; lastYear=y; String(y).split('').forEach(function(ch,i){ cols[i].style.transform='translateY('+(-ch*10)+'%)'; }); }
   setYear(1956);
+  odoPin.style.setProperty('--oh',odoSticky.offsetHeight+'px');
   /* 年表のシート：入ってきたら中身が出る・いま見ているタブを太字に */
   var sheets=[].slice.call(doc.querySelectorAll('.hs')), tabs=sheets.map(function(s){ return s.querySelector('.hs-tab'); });
   if('IntersectionObserver' in window&&!reduced){ var hio=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); hio.unobserve(e.target); } }); },{threshold:.3}); sheets.forEach(function(s){ hio.observe(s); }); }
@@ -283,7 +285,8 @@
     /* MESSAGE：年が 1956 → 2026 と進む */
     var cr=concept.getBoundingClientRect();
     if(cr.top<vh&&cr.bottom>0){
-      var orr=odoPin.getBoundingClientRect(), op=clamp((-orr.top+vh*.15)/(odoPin.offsetHeight-vh),0,1);
+      /* かたまりが止まり始めてから止まり終わるまでで 0→1（少し手前から進め始める） */
+      var orr=odoPin.getBoundingClientRect(), oTop=parseFloat(getComputedStyle(odoSticky).top)||0, oTravel=Math.max(1,odoPin.offsetHeight-odoSticky.offsetHeight), op=clamp((oTop-orr.top+vh*.15)/oTravel,0,1);
       setYear(Math.round(1956+70*op)); odoBar.style.setProperty('--p',op.toFixed(3)); odoJp.classList.toggle('on',op>.97);
       /* 読むと濃くなる */
       var rr=read.getBoundingClientRect(), p=clamp((vh*.86-rr.top)/(rr.height+vh*.86-vh*.42),0,1), k=Math.round(p*chars.length);
