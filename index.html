@@ -2,21 +2,18 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <!-- ============================================================
-     LABO 70th ANNIVERSARY ｜ 美容室LABO 70周年感謝祭
+     LABO 70th ANNIVERSARY ｜ 美容室LABO 70周年感謝祭（2026-10-06 から新しいデザイン）
      ============================================================
      このファイルの読み方
-       ✏️ ここから編集できます … ✏️ ここまで  →  この間の文字は自由に書き換えられます
-       ⚠️ 編集しないでください              →  この印のある部分を変えると、レイアウトが崩れます
-     ・「<」と「>」で囲まれた部分（例：<p class="jp">）は消さないでください
-     ・文章を改行したい時は <br> を入れます
-     ・写真は images フォルダに「同じ名前」で入れ直すだけで差し替わります
+       ・文章は <p>…</p> などの「<」「>」の間の文字だけを書き換えます（「<」「>」で囲まれた部分は消さない）
+       ・文章を改行したい時は <br> を入れます
+       ・写真は images フォルダに「同じ名前」で入れ直すだけで差し替わります
+       ・⚠️ の目印がある部分は、動きやレイアウトの仕組みなので触らないでください
      くわしい手順は「編集マニュアル.md」にあります。
      ============================================================ -->
-
-<!-- ⚠️ ここから下（サイトの説明・SNSで共有した時の表示・検索向けの情報）は編集しないでください -->
+<!-- ⚠️ ここから下（サイトの説明・SNSで共有した時の表示・検索向けの情報・書体）は編集しないでください -->
 <title>LABO 70th ANNIVERSARY ｜ 美容室LABO 70周年感謝祭</title>
 <meta name="description" content="1956年創業、栃木県矢板市の美容室LABO。70周年感謝祭を2026年10月31日（土）11:00-16:00に店舗前・店内で開催します。参加費無料・予約不要。">
 <!-- 公開URL（labo-70th.pages.dev）が確定したら、下の3か所の https://labo-70th.pages.dev/ を差し替える -->
@@ -35,20 +32,15 @@
 <meta name="twitter:title" content="LABO 70th ANNIVERSARY ｜ 美容室LABO 70周年感謝祭">
 <meta name="twitter:description" content="2026年10月31日（土）11:00-16:00、栃木県矢板市の美容室LABOで70周年感謝祭を開催。参加費無料・予約不要。">
 <meta name="twitter:image" content="https://labo-70th.pages.dev/images/ogp.jpg">
-<meta name="theme-color" content="#FF9900">
+<meta name="theme-color" content="#212E7D">
 <link rel="icon" href="favicon.png" sizes="64x64" type="image/png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&display=swap" rel="stylesheet">
-<!-- 抽選会の見出し「ハズレなし、大抽選会！」だけに使う太い書体（使う文字だけを読み込む） -->
-<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&text=%E3%83%8F%E3%82%BA%E3%83%AC%E3%81%AA%E3%81%97%E3%80%81%E5%A4%A7%E6%8A%BD%E9%81%B8%E4%BC%9A%EF%BC%81&display=swap" rel="stylesheet">
-<!-- 日本語の2書体（Shippori Mincho / Noto Sans JP）は script.js がページ内の文字だけを含む形で読み込む（分割ファイル約60個→2個）。JSが使えない環境向けの予備が下の noscript -->
-<noscript><link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho&family=Noto+Sans+JP&display=swap" rel="stylesheet"></noscript>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,300..900;1,62..125,300..900&family=Noto+Sans+JP:wght@400;500;700;900&family=Covered+By+Your+Grace&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-
 <!-- 検索エンジン向けのイベント情報（schema.org Event）。日時や場所を変更した時は、ここも同じ内容にそろえる -->
 <script type="application/ld+json">
 {
@@ -84,576 +76,377 @@
   "url": "https://labo-70th.pages.dev/"
 }
 </script>
-
-<!-- 慣性スクロール（Lenis）と、このサイトの演出 -->
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
 <script src="script.js" defer></script>
 <!-- ⚠️ ここまで編集しないでください -->
 </head>
 <body>
+
+<!-- ================= 最初の演出（2026-10-06 試作 B を採用）：紺の1本線がオレンジの点を先頭に流れて「70」を一筆書きし、
+     真ん中をオレンジの線が横切って、ハサミで切るように画面が上下に開く。描いている間は1枚の線（.ld-full）、切る瞬間に上下の半分（.ld-half）へ切り替える（半分ずつで描くと真ん中の継ぎ目で線が途切れて見えることがあるため） ================= -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="ld-half t"><svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"><path/></svg></div>
+  <div class="ld-half b"><svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"><path/></svg><p class="ld-cap">LABO <span>70TH ANNIVERSARY</span></p></div>
+  <svg class="ld-full" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"><path/><circle class="ld-tip" r="9"/></svg>
+  <i class="ld-cut"></i>
+</div>
+
+<!-- ================= ヘッダー・メニュー ================= -->
+<header class="hd">
+  <a class="logo" href="#top"><b>LABO</b><span>70TH ANNIVERSARY</span></a>
+  <div class="hd-r">
+    <a class="ig" href="https://www.instagram.com/labo.1956/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" class="dot"/></svg></a>
+    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="menu"><span class="mb-t"><span>MENU</span><span>CLOSE</span></span><span class="mb-i" aria-hidden="true"><i></i><i></i></span></button>
+  </div>
+</header>
+<nav class="menu" id="menu" aria-label="サイト内メニュー">
+  <div class="menu-in">
+    <div class="mg"><p>MESSAGE</p><a href="#message">70年分のありがとうを。</a></div>
+    <div class="mg"><p>CONTENTS</p><a href="#contents">当日の内容</a><a href="#shops">出店者</a></div>
+    <div class="mg"><p>EVENT</p><a href="#event" data-slide="0">日時</a><a href="#event" data-slide="1">参加方法</a><a href="#event" data-slide="2">アクセス</a><a href="#event" data-slide="3">駐車場</a></div>
+    <div class="mg"><p>STAFF / HISTORY</p><a href="#staff">スタッフ</a><a href="#history">LABOのあゆみ</a></div>
+    <div class="mg"><p>SNS</p><a href="https://www.instagram.com/labo.1956/" target="_blank" rel="noopener">Instagram</a><a href="https://line.me/R/ti/p/@zgn8493r" target="_blank" rel="noopener">LINE</a></div>
+  </div>
+</nav>
+
 <main>
 
-<!-- ============================================================
-     S1 ヒーロー（配布ビラの再現＋開幕演出）
-     ============================================================ -->
-<section class="hero" id="hero">
-  <div class="sheet">
-    <!-- ⚠️ トンボ（四隅の印）：編集しないでください -->
-    <div class="marks" aria-hidden="true">
-      <span class="mark tl"></span><span class="mark tr"></span><span class="mark bl"></span><span class="mark br"></span>
-    </div>
-    <!-- ⚠️ 大見出し「70TH ANNIVERSARY」：1文字ずつ動かす仕組みのため編集しないでください -->
-    <h1 class="title" aria-label="70th Anniversary">
-      <span class="line">70TH</span>
-      <span class="line">ANNIVERSARY</span>
+<!-- ================= ヒーロー ================= -->
+<section class="hero" id="top" aria-label="70周年感謝祭">
+  <p class="side l">HAIR SALON LABO — SINCE 1956</p>
+  <p class="side r">2026.10.31 SAT — 11:00-16:00</p>
+  <div class="hero-type-wrap">
+    <h1 class="hero-type" aria-label="70th Anniversary Party">
+      <span class="ht"><span>70TH</span></span>
+      <span class="ht"><span>ANNIVERSARY</span></span>
+      <span class="ht"><span>PARTY</span></span>
     </h1>
-    <!-- ⚠️ オレンジの版と写真：編集しないでください（写真は images/hero.jpg を同じ名前で入れ替えると差し替わります） -->
-    <div class="block">
-      <div class="plate-ghost" aria-hidden="true"></div>
-      <div class="plate" aria-hidden="true"></div>
-      <div class="photo-wrap"><div class="tone"><img src="images/hero.jpg" width="623" height="882" alt="1956年に創業した祖母と、店を受け継いだ父" fetchpriority="high" decoding="async"></div></div>
-      <div class="years" aria-hidden="true">1956-2026</div>
-    </div>
+    <p class="ht-script" aria-hidden="true">Thanks!</p>
+    <p class="hero-jp">70年分のありがとうを。</p>
   </div>
-  <div class="foot">
-    <div>
-      <!-- ✏️ ここから編集できます：ヒーロー下の文字（ビラと同じ内容） -->
-      <p class="jp">70年分のありがとうを。</p>
-      <p class="en">ANNIVERSARY PARTY<br>2026.10.31 sat</p>
-      <p class="time">11:00-16:00</p>
-      <!-- ✏️ ここまで -->
-    </div>
-    <div class="meta">
-      <!-- ✏️ ここから編集できます：ヒーロー右下の小さな英文 -->
-      <div><p>free Entry</p><p style="margin-top:1.4em">no Reservation</p></div>
-      <p>Ahead of our 70th anniversary this December, we're holding a party — to thank you first.</p>
-      <!-- ✏️ ここまで -->
-    </div>
+  <div class="hero-cards" id="heroCards" aria-hidden="true">
+    <figure class="hc c1"><img src="images/history-03.jpg" alt=""></figure>
+    <figure class="hc c2"><img src="images/hero.jpg" alt=""></figure>
+    <figure class="hc c3"><img src="images/shop-02.jpg" alt=""></figure>
+    <figure class="hc c4"><img src="images/contents-02.jpg" alt="" style="object-position:50% 20%"></figure>
   </div>
+  <p class="scroll-cue" aria-hidden="true"><span>SCROLL</span><i></i></p>
 </section>
 
-
-<!-- ============================================================
-     S2 流れる帯（オレンジと黒の2本を逆方向・斜めに交差）
-     ============================================================ -->
-<!-- ✏️ ここから編集できます：帯に流れる文字（data-loop="…" の中。✱ は区切りの飾り（絵文字にならない記号）） -->
-<div class="bands" aria-hidden="true">
-  <div class="band a"><div class="track" data-loop="70TH ANNIVERSARY ✱ 2026.10.31 SAT ✱ 11:00-16:00 ✱ FREE ENTRY ✱ NO RESERVATION ✱ "></div></div>
-  <div class="band b"><div class="track" data-loop="70年分のありがとうを。✱ MUSIC ✱ FOOD ✱ PHOTO ✱ LOTTERY ✱ GOODS ✱ 矢板市上町15-29 ✱ "></div></div>
-</div>
-<!-- ✏️ ここまで -->
-<div class="ichimatsu" aria-hidden="true"></div>
-
-
-<!-- ============================================================
-     S3 MESSAGE（Instagram告知原稿の文章をそのまま掲載）
-     ============================================================ -->
-<div class="wrapsec"><div class="wm" aria-hidden="true" style="left:-3vw;top:4vh">70</div>
-<div class="dust" id="dust1" aria-hidden="true"></div>
-<section class="sec" id="message">
-  <p class="sub">Message</p>
-  <!-- ✏️ 見出し（文字を変える時は、data-t="…" の中も同じ文字にしておく） -->
-  <h2 class="h2 jp"><span class="gh" data-t="70年分の">70年分の</span><br><span class="gh" data-t="ありがとうを。">ありがとうを。</span></h2>
-  <div class="body" style="margin-top:6vh">
-    <!-- ✏️ ここから編集できます：ごあいさつ本文（段落ごとに <p> … </p>） -->
-    <p>1956年の創業から、今年の12月で70年を迎えます。祖母が創業し、父が受け継ぎ、現在に至ります。そして、そのバトンを私たち姉弟で受け継いでいきます。</p>
-    <p>当時、女手１つで子供3人を育てながら店を立ち上げた祖母のヴァイタリティーには、改めて尊敬の念を抱かざるを得ません。</p>
+<!-- ================= MESSAGE（書体が替わる見出し＋読むと濃くなる本文） ================= -->
+<section class="concept" id="message">
+  <div class="odo-pin" id="odoPin">
+    <div class="odo-sticky">
+      <p class="label" data-scramble>MESSAGE FOR 70 YEARS</p>
+      <h2 class="odo" id="odo" aria-label="1956年から2026年へ"><span class="dg"></span><span class="dg"></span><span class="dg o"></span><span class="dg o"></span></h2>
+      <div class="odo-bar" aria-hidden="true"><i id="odoBar"></i><span>1956</span><span>2026</span></div>
+      <h3 class="c-jp" id="odoJp">70年分のありがとうを。</h3>
+    </div>
+  </div>
+  <div class="read" id="read">
+    <p>1956年の創業から、今年の12月で70年を迎えます。</p>
+    <p class="big navy">祖母が創業し、父が受け継ぎ、現在に至ります。</p>
+    <p>そして、そのバトンを私たち姉弟で受け継いでいきます。</p>
+    <p class="gap">当時、女手１つで子供3人を育てながら店を立ち上げた祖母のヴァイタリティーには、改めて尊敬の念を抱かざるを得ません。</p>
     <p>そして、祖母から受け継いだ父は、時代をキャッチするアンテナの高さ、変化への適応力があったからこそ、ここまで歩んでこられたのだと感じています。</p>
-    <p>私たちも、その想いや歴史を受け継ぎ、美容師としての進化はもちろん、地域に還元していけるよう私たちなりの歩みを進めてまいります。これからも変わらず応援していただけると嬉しいです。</p>
-    <p>何よりここまで歩んでこられたのは、通い続けてくださったお客様、今までLABOを支えてくれたスタッフ、そしてこの街のあたたかさがあったからにほかになりません。心からの感謝を込めて、まずはお礼をお伝えさせてください。本当に、ありがとうございます。</p>
-    <p>この節目の年に、日頃の感謝を形にするため、少し早いですが2026年10月31日（土）、当店にて70周年感謝祭を開催いたします。音楽と、おいしい食べものと、LABOの70年をたどる小さな写真展。<span class="hl">肩ひじ張らない、お祭りのような一日</span>をスタッフ一同で準備しています。どうぞお気軽に遊びにいらしてください。</p>
-    <p>皆さまとお会いできることを、心より楽しみにしております。</p>
-    <!-- ✏️ ここまで -->
-  </div>
-
-  <!-- ⚠️ 統計帯（画面に入ると0から数え上がる）。数字を変える時は data-count="…" の数字だけを変える -->
-  <div class="stats">
-    <div class="stat"><b data-count="70">0</b><span>Years</span></div>
-    <div class="stat"><b data-count="3">0</b><span>Generations</span></div>
-    <div class="stat"><b data-count="5">0</b><span>Staff</span></div>
-  </div>
-</section></div>
-
-
-<!-- ============================================================
-     S4 STAFF（5名。写真とテキストを左右交互に配置）
-     ・肩書きは全員「Staff」で統一
-     ・1人分（▼〜▲）をまるごとコピーして貼り付けると1人増やせます。1人分を消せば減らせます
-     ・写真：images/staff-01.jpg（上から1人目）〜 staff-05.jpg（5人目）。同じ名前で入れ替えると差し替わります
-     ・2026-10-02 から似顔絵イラスト（オレンジ地・白線）。<div class="sp illust"> の illust があると色はそのまま、消すと写真用の紺デュオトーンになります
-     ・人を増やした時は、コピーした中の <img src="images/staff-01.jpg" …> の番号を staff-06.jpg のように進め、その名前で写真を入れます
-     ============================================================ -->
-<section class="sec" id="staff">
-  <p class="sub">Staff</p>
-  <!-- ⚠️ 見出し。「仮」の印を消すには <span class="tag">仮</span> を消す -->
-  <h2 class="h2"><span class="gh" data-t="STAFF">STAFF</span><span class="tag">仮</span></h2>
-  <div class="body" style="margin-top:4vh">
-    <!-- ✏️ ここから編集できます：STAFFの前書き -->
-    <p>感謝を込めてスタッフから簡単なご挨拶。</p>
-    <!-- ✏️ ここまで -->
-  </div>
-
-  <!-- ▼▼▼ スタッフ 1人分 ここから（この行から「▲▲▲ ここまで」の行までをコピーすると1人増えます） ▼▼▼ -->
-  <div class="staff-row">
-    <div class="sp illust">
-      <!-- ✏️ 写真：images の staff-01.jpg を同じ名前で入れ替えると変わります。alt="…" の中は名前。いまは似顔絵イラスト（class="sp illust" で色そのまま。写真に戻す時は illust を消すとデュオトーンになる） -->
-      <img src="images/staff-01.jpg" alt="渡辺葉月" loading="lazy">
-    </div>
-    <div>
-      <!-- ✏️ ここから編集できます：名前・肩書き・ひとこと（改行したい所に <br>。段落を分ける時は <p class="st-text">…</p> をもう1つ） -->
-      <p class="st-name">渡辺葉月</p>
-      <p class="st-role">Staff</p>
-      <p class="st-text">LABOをご愛顧の皆様<br>いつもありがとうございます。<br>おかげさまで70周年を迎えられる事に、心より感謝申し上げます。<br>これからも技術を磨きながら、<br>3代目なりに、LABOに関わる皆様と一緒に楽しい空間をつくっていきたいと思います。<br>今後ともどうぞ宜しくお願い申し上げます。<br>周年祭当日も一緒に楽しみましょう♪</p>
-      <!-- ✏️ ここまで -->
-    </div>
-  </div>
-  <!-- ▲▲▲ スタッフ 1人分 ここまで ▲▲▲ -->
-
-  <!-- ▼▼▼ スタッフ 1人分 ここから ▼▼▼ -->
-  <div class="staff-row">
-    <div class="sp illust">
-      <!-- ✏️ 写真：images の staff-02.jpg を同じ名前で入れ替えると変わります。alt="…" の中は名前。いまは似顔絵イラスト（class="sp illust" で色そのまま。写真に戻す時は illust を消すとデュオトーンになる） -->
-      <img src="images/staff-02.jpg" alt="渡辺良" loading="lazy">
-    </div>
-    <div>
-      <!-- ✏️ ここから編集できます -->
-      <p class="st-name">渡辺良</p>
-      <p class="st-role">Staff</p>
-      <!-- ✏️ ひとことは後日。届いたら下の <p class="st-text"></p> の間に書く（改行したい所に <br>） -->
-      <p class="st-text"></p>
-      <!-- ✏️ ここまで -->
-    </div>
-  </div>
-  <!-- ▲▲▲ スタッフ 1人分 ここまで ▲▲▲ -->
-
-  <!-- ▼▼▼ スタッフ 1人分 ここから ▼▼▼ -->
-  <div class="staff-row">
-    <div class="sp illust">
-      <!-- ✏️ 写真：images の staff-03.jpg を同じ名前で入れ替えると変わります。alt="…" の中は名前。いまは似顔絵イラスト（class="sp illust" で色そのまま。写真に戻す時は illust を消すとデュオトーンになる） -->
-      <img src="images/staff-03.jpg" alt="増渕由香里" loading="lazy">
-    </div>
-    <div>
-      <!-- ✏️ ここから編集できます -->
-      <p class="st-name">増渕由香里</p>
-      <p class="st-role">Staff</p>
-      <p class="st-text">LABO70周年心よりおめでとうございます。<br>70周年という特別な節目を皆様と楽しく過ごせることをとても嬉しく思います。<br>これからも、たくさんの笑顔とご縁に恵まれ新たな歴史が紡がれていきますように。</p>
-      <!-- ✏️ ここまで -->
-    </div>
-  </div>
-  <!-- ▲▲▲ スタッフ 1人分 ここまで ▲▲▲ -->
-
-  <!-- ▼▼▼ スタッフ 1人分 ここから ▼▼▼ -->
-  <div class="staff-row">
-    <div class="sp illust">
-      <!-- ✏️ 写真：images の staff-04.jpg を同じ名前で入れ替えると変わります。alt="…" の中は名前。いまは似顔絵イラスト（class="sp illust" で色そのまま。写真に戻す時は illust を消すとデュオトーンになる） -->
-      <img src="images/staff-04.jpg" alt="渡辺典子" loading="lazy">
-    </div>
-    <div>
-      <!-- ✏️ ここから編集できます -->
-      <p class="st-name">渡辺典子</p>
-      <p class="st-role">Staff</p>
-      <p class="st-text">お客様の温かい支えのおかげで創業70周年を迎えられることができました。<br>これほど長く続けてこられたのも何十年と通ってくださるお客様、家族2代、3代で通ってくださるお客様、皆様の支えがあったからです。心より感謝申し上げます。</p>
-      <p class="st-text">時代が移り変わり、3代目の娘、息子を中心に新しい風を吹き込んでくれています。<br>今後とも、どうぞよろしくお願いいたします。</p>
-      <!-- ✏️ ここまで -->
-    </div>
-  </div>
-  <!-- ▲▲▲ スタッフ 1人分 ここまで ▲▲▲ -->
-
-  <!-- ▼▼▼ スタッフ 1人分 ここから ▼▼▼ -->
-  <div class="staff-row">
-    <div class="sp illust">
-      <!-- ✏️ 写真：images の staff-05.jpg を同じ名前で入れ替えると変わります。alt="…" の中は名前。いまは似顔絵イラスト（class="sp illust" で色そのまま。写真に戻す時は illust を消すとデュオトーンになる） -->
-      <img src="images/staff-05.jpg" alt="渡辺稔" loading="lazy">
-    </div>
-    <div>
-      <!-- ✏️ ここから編集できます -->
-      <p class="st-name">渡辺稔</p>
-      <p class="st-role">Staff</p>
-      <p class="st-text">2代目としてこれまでやってこれました。ありがとう。<br>目が見えなくなってきたし、耳も聴こえなくなってきたし、いろいろ指摘される事が多すぎて覚えてられないし…。<br>あと32年、100歳まで仕事をするにはどうすれば良いでしょうか？<br>今後ともよろしくお願いします。</p>
-      <!-- ✏️ ここまで -->
-    </div>
-  </div>
-  <!-- ▲▲▲ スタッフ 1人分 ここまで ▲▲▲ -->
-</section>
-
-
-<!-- ============================================================
-     S5 HISTORY（横スクロール＋年号カウンター＋鏡）
-     ・枠は 1956 → 2026.10.31 の順に左から並びます
-     ・1枠分（▼〜▲）をまるごとコピーして貼り付けると1枠増えます
-     ・style="--w:28" の数字が枠の幅（大きいほど広い）。写真の少ない年代は狭く、節目は広く
-     ・写真：images/history-01.jpg のような名前で入れ、枠の中の <img src="…"> を同じ名前にします
-     ・オレンジの「PHOTO WANTED」枠は写真待ち。中に <img src="images/history-02.jpg" alt="…"> の1行を足すと写真枠になります
-     ・最後の枠（2026.10.31）は当日の写真用に空けてあります。感謝祭のあとに写真を入れると、告知サイトが記録サイトに変わります
-     ============================================================ -->
-<section class="sec" style="padding-bottom:4vh">
-  <p class="sub">History</p>
-  <!-- ⚠️ 見出し。「仮」の印を消すには <span class="tag">仮</span> を消す -->
-  <h2 class="h2"><span class="gh" data-t="1956—2026">1956—2026</span><span class="tag">仮</span></h2>
-  <div class="body" style="margin-top:4vh">
-    <!-- ✏️ ここから編集できます：HISTORYの前書き -->
-    <p>写真はすべて同じ青のトーンに揃えてあります。けれど鏡をかざすと、その中だけ当時の色が戻る。<br>スクロールすると、70年が右から左へ流れます。</p>
-    <!-- ✏️ ここまで -->
+    <p class="gap">私たちも、その想いや歴史を受け継ぎ、美容師としての進化はもちろん、地域に還元していけるよう私たちなりの歩みを進めてまいります。これからも変わらず応援していただけると嬉しいです。</p>
+    <p class="gap">何よりここまで歩んでこられたのは、通い続けてくださったお客様、今までLABOを支えてくれたスタッフ、そしてこの街のあたたかさがあったからにほかになりません。心からの感謝を込めて、まずはお礼をお伝えさせてください。</p>
+    <p class="big orange">本当に、ありがとうございます。</p>
+    <p class="gap">この節目の年に、日頃の感謝を形にするため、少し早いですが2026年10月31日（土）、当店にて70周年感謝祭を開催いたします。音楽と、おいしい食べものと、LABOの70年をたどる小さな写真展。</p>
+    <p class="big mark"><span>肩ひじ張らない、お祭りのような一日</span>をスタッフ一同で準備しています。</p>
+    <p>どうぞお気軽に遊びにいらしてください。</p>
+    <p class="gap">皆さまとお会いできることを、心より楽しみにしております。</p>
   </div>
 </section>
 
+<!-- 流れる大文字（スクロールで横に動く） -->
+<div class="bigline" aria-hidden="true"><div class="bl-track" id="blTrack"><span class="b1">Thank you.</span><span class="b2">70TH</span><span class="b3">ANNIVERSARY</span><span class="b4">LABO.</span><span class="b1">Thank you.</span><span class="b2">70TH</span><span class="b3">ANNIVERSARY</span><span class="b4">LABO.</span></div></div>
+
+<!-- ================= CONTENTS（曲面ギャラリー） ================= -->
+<section class="works" id="contents">
+  <div class="w-intro">
+    <p class="label light" data-scramble>WHAT'S ON 10.31</p>
+    <p class="w-lead">感謝を込めたspecialな一日をお届け★</p>
+  </div>
+  <div class="w-pin" id="wPin">
+    <div class="w-sticky">
+      <h2 class="w-title" id="wTitle"><span class="wt-in">FOOD &amp;<br>DRINK</span></h2>
+      <canvas class="w-canvas" id="wCanvas" aria-hidden="true"></canvas>
+      <div class="w-info">
+        <p class="w-pill" id="wPill">フード＆ドリンク</p>
+        <p class="w-text" id="wText"></p>
+      </div>
+      <p class="w-no" id="wNo">01</p>
+      <div class="w-ruler" aria-hidden="true"><div class="w-ticks" id="wTicks"></div><i class="w-needle"></i></div>
+    </div>
+  </div>
+  <!-- 項目の文章（曲面ギャラリーの下に出す。読み上げ・検索用にも本文はここ） -->
+  <ol class="w-data" id="wData" hidden>
+    <li data-title="FOOD &amp;<br>DRINK" data-pill="フード＆ドリンク" data-color="#FF9900" data-imgs="images/shop-02.jpg|images/shop-03.jpg|images/shop-05.jpg|images/shop-01.jpg">店前がマルシェになります。ビール・ハイボール・ソフトドリンクもご用意しています。チラシをご持参の方は、ドリンク1杯無料！</li>
+    <li data-title="DJ<br>TIME" data-pill="DJ" data-color="#FFFFFF" data-imgs="images/contents-02.jpg">@naoto_shijima_shijima_ru による心地よいDJで会場を盛り上げます。</li>
+    <li data-title="PHOTO<br>EXHIBITION" data-pill="写真展" data-color="#FFC56B" data-imgs="images/history-01.jpg|images/history-03.jpg|images/history-05.jpg">旧店舗の写真など今までの当店の歴史をパネルで辿る、小さな写真展を店内で開催します。</li>
+    <li data-title="LOTTERY" data-pill="抽選会" data-color="#FFFFFF" data-imgs="@lottery" data-prizes="images/lottery-01.jpg|images/lottery-02.jpg|images/lottery-03.jpg|images/lottery-04.jpg">感謝を込めてハズレ無しの抽選会を随時開催します。ヘアアイロンや美顔器など豪華景品をご用意しております！お楽しみに！！</li>
+    <li data-title="ORIGINAL<br>GOODS" data-pill="オリジナルグッズ" data-color="#FF9900" data-imgs="images/goods-tee.jpg|images/contents-05.jpg">感謝を込めて先着70名様に70周年記念ミニハンカチタオルをプレゼント！！お早めにご来場ください！！他にも70周年記念オリジナルTシャツも販売いたします！</li>
+  </ol>
+</section>
+
+<!-- 出店者（カード） -->
+<section class="shops" id="shops">
+  <h2 class="flip" data-flip>FOOD &amp; DRINK</h2>
+  <p class="sh-lead">店前がマルシェになります。おいしいお食事とともにお楽しみください。詳細は後ほど配信いたします。チェックをお忘れなく！</p>
+  <div class="sh-grid">
+    <article class="sh-card"><figure><img src="images/shop-02.jpg" alt="MYS,COFFEE" loading="lazy"></figure><p class="pill">COFFEE</p><h3>MYS,COFFEE</h3><p class="sh-ig">@315mys_coffee</p><p class="sh-tx">Specialty coffee<br>ブルーチーズ入りバスクチーズケーキ<br>スコーン</p></article>
+    <article class="sh-card"><figure><img src="images/shop-03.jpg" alt="Small Pocket" loading="lazy"></figure><p class="pill">DONUTS</p><h3>Small Pocket</h3><p class="sh-ig">@smallpocket22</p><p class="sh-tx">ドーナツ各種</p></article>
+    <article class="sh-card"><figure><img src="images/shop-05.jpg" alt="喫茶院アルッテ" loading="lazy"></figure><p class="pill">CURRY</p><h3>喫茶院アルッテ</h3><p class="sh-ig">@kissainn_arzte_karasuyama</p><p class="sh-tx">アルッテ特製キーマカレー</p></article>
+    <article class="sh-card"><figure><img src="images/shop-01.jpg" alt="タイラーメン" loading="lazy"></figure><p class="pill">NOODLE</p><h3>タイラーメン</h3><p class="sh-tx">タイラーメン</p></article>
+    <article class="sh-card"><figure><img src="images/shop-04.jpg" alt="たそがれのスペアリブ" loading="lazy"></figure><p class="pill">SPARERIBS</p><h3>たそがれ</h3><p class="sh-tx">スペアリブ。店舗前で週に一度営業している、父のリヤカー屋台です。</p></article>
+  </div>
+  <p class="sh-drink">ビール・ハイボール・ソフトドリンクもご用意しています。店頭でお配りしているチラシをご持参の方は、<b>ドリンク1杯無料</b>になります。</p>
+</section>
+
+<!-- ================= EVENT（白いカードがせり上がる・4枚の切り替え） ================= -->
+<section class="about" id="event">
+  <div class="ab-head">
+    <h2 class="ab-title">EVENT</h2>
+    <p class="ab-sub">2026.10.31 SAT</p>
+  </div>
+  <div class="sheet-pin" id="sheetPin">
+    <div class="sheet">
+      <div class="slides" id="slides">
+        <article class="slide" data-c="#FF9900">
+          <p class="s-no">01</p>
+          <h3 class="s-h"><span class="row"><span class="w">DATE</span><span class="strip"><img src="images/hero.jpg" alt=""></span></span><span class="row"><span class="strip sm"><img src="images/history-03.jpg" alt=""></span><span class="w c">&amp; TIME</span></span></h3>
+          <div class="s-body">
+            <p class="s-big">2026.10.31 <small>SAT</small><br>11:00 — 16:00</p>
+            <div class="cd" id="cd" data-target="2026-10-31T11:00:00+09:00"><p class="cd-l">70周年感謝祭まで、あと</p><p class="cd-n"><b data-cd="d">--</b><u>日</u><b data-cd="h">--</b><u>時間</u><b data-cd="m">--</b><u>分</u><b data-cd="s">--</b><u>秒</u></p><p class="cd-done">70周年感謝祭は終了しました。ご来場いただき、ありがとうございました。</p></div>
+          </div>
+        </article>
+        <article class="slide" data-c="#212E7D">
+          <p class="s-no">02</p>
+          <h3 class="s-h"><span class="row"><span class="w">FREE</span><span class="strip"><img src="images/shop-03.jpg" alt=""></span></span><span class="row"><span class="strip sm"><img src="images/contents-02.jpg" alt="" style="object-position:50% 20%"></span><span class="w c">ENTRY</span></span></h3>
+          <div class="s-body">
+            <p class="s-mid">参加費無料・予約不要。どなたでもご参加いただけます。</p>
+            <p>また、店頭でお配りしているチラシをご持参いただいた方は、<b>ワンドリンク無料</b>になります！</p>
+            <p>一般の方でご参加希望の方は、<a href="https://www.instagram.com/labo.1956/" target="_blank" rel="noopener">DM</a>／<a href="https://line.me/R/ti/p/@zgn8493r" target="_blank" rel="noopener">公式LINE</a>にて「参加希望」とメッセージをお送りください。</p>
+            <p class="fine">※お客様に向けた感謝祭になりますので、当店をご利用いただいたことのない方は混雑時入場規制をさせていただく可能性がございます。予めご了承ください。</p>
+          </div>
+        </article>
+        <article class="slide" data-c="#FF9900">
+          <p class="s-no">03</p>
+          <h3 class="s-h"><span class="row"><span class="w">ACCESS</span><span class="strip"><img src="images/history-07.jpg" alt=""></span></span><span class="row"><span class="strip sm"><img src="images/shop-05.jpg" alt=""></span><span class="w c">&amp; MAP</span></span></h3>
+          <div class="s-body">
+            <p class="s-mid">美容室LABO 店舗前・店内<br>栃木県矢板市上町15-29</p>
+            <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E7%BE%8E%E5%AE%B9%E5%AE%A4LABO+%E6%A0%83%E6%9C%A8%E7%9C%8C%E7%9F%A2%E6%9D%BF%E5%B8%82%E4%B8%8A%E7%94%BA15-29" target="_blank" rel="noopener"><span>GOOGLE MAP で開く</span><i aria-hidden="true">→</i></a>
+          </div>
+        </article>
+        <article class="slide" data-c="#212E7D">
+          <p class="s-no">04</p>
+          <h3 class="s-h"><span class="row"><span class="w">PARKING</span><span class="strip"><img src="images/shop-01.jpg" alt=""></span></span><span class="row"><span class="strip sm"><img src="images/history-04.jpg" alt=""></span><span class="w c">INFO</span></span></h3>
+          <div class="s-body">
+            <p class="s-mid">ご来場に際してのお願い</p>
+            <ul class="park">
+              <li>会場付近の駐車スペースは、店舗近くの砂利駐車場・空き地に止めていただきますようお願いいたします。</li>
+              <li>混雑時は臨時駐車場として、徒歩3分圏内にある<b>矢板中学校職員駐車場（体育館横）</b>をご利用下さい。</li>
+              <li>また、路上駐車は近隣住民様のご迷惑となりますのでご遠慮ください。</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+      <div class="dots" id="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STAFF（散らばる似顔絵） ================= -->
+<section class="staff" id="staff">
+  <div class="st-stage" id="stStage">
+    <figure class="sp p1" data-depth=".35"><img src="images/staff-01.jpg" alt=""></figure>
+    <figure class="sp p2" data-depth=".6"><img src="images/staff-02.jpg" alt=""></figure>
+    <figure class="sp p3" data-depth=".25"><img src="images/staff-03.jpg" alt=""></figure>
+    <figure class="sp p4" data-depth=".5"><img src="images/staff-04.jpg" alt=""></figure>
+    <figure class="sp p5" data-depth=".4"><img src="images/staff-05.jpg" alt=""></figure>
+    <div class="st-center">
+      <p class="st-lead">感謝を込めて<br>スタッフから簡単なご挨拶。</p>
+      <h2 class="st-h" aria-label="Thank you from our staff"><span class="a">THANK YOU</span><span class="b">from our</span><span class="c">Staff</span></h2>
+    </div>
+  </div>
+  <div class="st-list">
+    <article class="st-card"><img src="images/staff-01.jpg" alt="渡辺葉月" loading="lazy"><div><h3>渡辺葉月</h3><p>LABOをご愛顧の皆様<br>いつもありがとうございます。<br>おかげさまで70周年を迎えられる事に、心より感謝申し上げます。<br>これからも技術を磨きながら、<br>3代目なりに、LABOに関わる皆様と一緒に楽しい空間をつくっていきたいと思います。<br>今後ともどうぞ宜しくお願い申し上げます。<br>周年祭当日も一緒に楽しみましょう♪</p></div></article>
+    <article class="st-card"><img src="images/staff-02.jpg" alt="渡辺良" loading="lazy"><div><h3>渡辺良</h3></div></article>
+    <article class="st-card"><img src="images/staff-03.jpg" alt="増渕由香里" loading="lazy"><div><h3>増渕由香里</h3><p>LABO70周年心よりおめでとうございます。<br>70周年という特別な節目を皆様と楽しく過ごせることをとても嬉しく思います。<br>これからも、たくさんの笑顔とご縁に恵まれ新たな歴史が紡がれていきますように。</p></div></article>
+    <article class="st-card"><img src="images/staff-04.jpg" alt="渡辺典子" loading="lazy"><div><h3>渡辺典子</h3><p>お客様の温かい支えのおかげで創業70周年を迎えられることができました。<br>これほど長く続けてこられたのも何十年と通ってくださるお客様、家族2代、3代で通ってくださるお客様、皆様の支えがあったからです。心より感謝申し上げます。</p><p>時代が移り変わり、3代目の娘、息子を中心に新しい風を吹き込んでくれています。<br>今後とも、どうぞよろしくお願いいたします。</p></div></article>
+    <article class="st-card"><img src="images/staff-05.jpg" alt="渡辺稔" loading="lazy"><div><h3>渡辺稔</h3><p>2代目としてこれまでやってこれました。ありがとう。<br>目が見えなくなってきたし、耳も聴こえなくなってきたし、いろいろ指摘される事が多すぎて覚えてられないし…。<br>あと32年、100歳まで仕事をするにはどうすれば良いでしょうか？<br>今後ともよろしくお願いします。</p></div></article>
+  </div>
+</section>
+
+<!-- ================= HISTORY（値札タグの付いたシートが下から重なっていく年表。右端に 1956〜2026 の目盛り） ================= -->
 <section class="history" id="history">
-  <!-- ⚠️ ここから2行は編集しないでください -->
-  <div class="sticky" id="stickywrap">
-    <div class="rail" id="rail">
-
-      <!-- ▼▼▼ 年表 1枠目 ここから（この行から「▲▲▲ ここまで」の行までをコピーすると1枠増えます） ▼▼▼ -->
-      <div class="panel" style="--w:28">
-        <!-- ✏️ 年号（見出し） -->
-        <p class="year">1956</p>
-        <!-- 写真枠。aspect-ratio は枠の縦横比（横/縦）。写真は images/history-01.jpg を同じ名前で入れ替えると差し替わります -->
-        <div class="shot" style="aspect-ratio:624/883">
-          <img src="images/history-01.jpg" width="440" height="622" alt="創業当時の祖母と父" loading="lazy">
+  <div class="hs-head">
+    <p class="label" data-scramble>HISTORY</p>
+    <h2 class="hs-ja">LABOのあゆみ</h2>
+    <p class="hs-lead">写真で辿る、LABOの70年。<span class="tag">仮</span></p>
+  </div>
+  <div class="hs-stack">
+    <article class="hs" style="--i:0;--bg:#FF9900;--fg:#1B1F3B">
+      <p class="hs-tab"><span class="l">1956</span><span class="s">'56</span></p>
+      <div class="hs-in">
+        <figure class="hs-photo" style="--rot:-4deg"><img src="images/history-01.jpg" alt="創業当時の祖母と父" loading="lazy"><figcaption>1956</figcaption></figure>
+        <div class="hs-tx">
+          <p class="hs-yr">1956</p><p class="hs-era">昭和31年</p>
+          <h3>創業</h3>
+          <p class="hs-p">祖母が創業。女手ひとつで子供3人を育てながら、この街に店を構える。</p>
         </div>
-        <!-- ✏️ 説明文 -->
-        <p class="cap">祖母が創業。女手ひとつで子供3人を育てながら、この街に店を構える。</p>
       </div>
-      <!-- ▲▲▲ 年表 1枠目 ここまで ▲▲▲ -->
-
-      <!-- ▼▼▼ 年表 2枠目（写真待ち） ここから ▼▼▼ -->
-      <div class="panel" style="--w:18">
-        <!-- ✏️ 年号。確定したら <span class="tag">仮</span> を消す -->
-        <p class="year">1960s<span class="tag">仮</span></p>
-        <!-- 写真待ちの枠。写真ができたら <span>…</span> の行の下に <img src="images/history-02.jpg" alt="説明"> を1行足す -->
-        <div class="shot empty" style="aspect-ratio:3/4">
-          <span>PHOTO<br>WANTED</span>
+      <div class="hs-rule" aria-hidden="true"><span class="t">1956</span><span class="b">2026</span><i style="--p:0"><b>1956</b></i></div>
+    </article>
+    <article class="hs" style="--i:1;--bg:#FFE4BC;--fg:#1B1F3B">
+      <p class="hs-tab"><span class="l">1960s</span><span class="s">'60s</span></p>
+      <div class="hs-in">
+        <figure class="hs-photo empty" style="--rot:3deg"><span>PHOTO<br>WANTED</span><figcaption>1960s</figcaption></figure>
+        <div class="hs-tx">
+          <p class="hs-yr">1960s</p><p class="hs-era">昭和35年〜</p>
+          <h3 class="none"><span class="tag">仮</span></h3>
+          <p class="hs-p">※年表データ待ち</p>
         </div>
-        <!-- ✏️ 説明文 -->
-        <p class="cap">※年表データ待ち</p>
       </div>
-      <!-- ▲▲▲ 年表 2枠目 ここまで ▲▲▲ -->
-
-      <!-- ▼▼▼ 年表 3枠目 ここから ▼▼▼ -->
-      <div class="panel" style="--w:30">
-        <!-- ✏️ 年号。確定したら <span class="tag">仮</span> を消す -->
-        <p class="year">旧店舗<span class="tag">仮</span></p>
-        <div class="shot" style="aspect-ratio:1536/1372">
-          <img src="images/history-03.jpg" width="880" height="786" alt="上町の旧店舗の外観" loading="lazy">
+      <div class="hs-rule" aria-hidden="true"><span class="t">1956</span><span class="b">2026</span><i style="--p:0.057"><b>1960s</b></i></div>
+    </article>
+    <article class="hs" style="--i:2;--bg:#212E7D;--fg:#FFFFFF">
+      <p class="hs-tab"><span class="l">旧店舗</span><span class="s">旧店</span></p>
+      <div class="hs-in">
+        <figure class="hs-photo" style="--rot:-4deg"><img src="images/history-03.jpg" alt="上町の旧店舗の外観" loading="lazy"><figcaption>旧店舗</figcaption></figure>
+        <div class="hs-tx">
+          <p class="hs-yr">旧店舗</p>
+          <h3>上町の旧店舗<span class="tag">仮</span></h3>
+          <p class="hs-p">上町の旧店舗。</p>
         </div>
-        <!-- ✏️ 説明文 -->
-        <p class="cap">上町の旧店舗。鏡をかざすと、当時の色のまま現れます。</p>
       </div>
-      <!-- ▲▲▲ 年表 3枠目 ここまで ▲▲▲ -->
-
-      <!-- ▼▼▼ 年表 4枠目 ここから ▼▼▼ -->
-      <div class="panel" style="--w:22">
-        <!-- ✏️ 年号。確定したら <span class="tag">仮</span> を消す -->
-        <p class="year">1970s<span class="tag">仮</span></p>
-        <div class="shot" style="aspect-ratio:282/400">
-          <img src="images/history-04.jpg" width="440" height="624" alt="創業者の祖母" loading="lazy">
+      <div class="hs-rule" aria-hidden="true"><span class="t">1956</span><span class="b">2026</span></div>
+    </article>
+    <article class="hs" style="--i:3;--bg:#FFFFFF;--fg:#1B1F3B">
+      <p class="hs-tab"><span class="l">1970s</span><span class="s">'70s</span></p>
+      <div class="hs-in">
+        <figure class="hs-photo" style="--rot:3deg"><img src="images/history-04.jpg" alt="創業者の祖母" loading="lazy"><figcaption>1970s</figcaption></figure>
+        <div class="hs-tx">
+          <p class="hs-yr">1970s</p><p class="hs-era">昭和45年〜</p>
+          <h3 class="none"><span class="tag">仮</span></h3>
+          <p class="hs-p">※撮影年不明</p>
         </div>
-        <!-- ✏️ 説明文 -->
-        <p class="cap">※撮影年不明</p>
       </div>
-      <!-- ▲▲▲ 年表 4枠目 ここまで ▲▲▲ -->
-
-      <!-- ▼▼▼ 年表 5枠目 ここから ▼▼▼ -->
-      <div class="panel" style="--w:24">
-        <!-- ✏️ 年号。確定したら <span class="tag">仮</span> を消す -->
-        <p class="year">1980s<span class="tag">仮</span></p>
-        <div class="shot" style="aspect-ratio:230/365">
-          <img src="images/history-05.jpg" width="440" height="698" alt="二代目の父" loading="lazy">
+      <div class="hs-rule" aria-hidden="true"><span class="t">1956</span><span class="b">2026</span><i style="--p:0.2"><b>1970s</b></i></div>
+    </article>
+    <article class="hs" style="--i:4;--bg:#FF9900;--fg:#1B1F3B">
+      <p class="hs-tab"><span class="l">1980s</span><span class="s">'80s</span></p>
+      <div class="hs-in">
+        <figure class="hs-photo" style="--rot:-4deg"><img src="images/history-05.jpg" alt="二代目の父" loading="lazy"><figcaption>1980s</figcaption></figure>
+        <div class="hs-tx">
+          <p class="hs-yr">1980s</p><p class="hs-era">昭和55年〜</p>
+          <h3>父が受け継ぐ<span class="tag">仮</span></h3>
+          <p class="hs-p">父が受け継ぐ。時代をキャッチするアンテナの高さと、変化への適応力。</p>
         </div>
-        <!-- ✏️ 説明文 -->
-        <p class="cap">父が受け継ぐ。時代をキャッチするアンテナの高さと、変化への適応力。</p>
       </div>
-      <!-- ▲▲▲ 年表 5枠目 ここまで ▲▲▲ -->
-
-      <!-- ▼▼▼ 年表 6枠目（写真待ち） ここから ▼▼▼ -->
-      <div class="panel" style="--w:17">
-        <!-- ✏️ 年号。確定したら <span class="tag">仮</span> を消す -->
-        <p class="year">1990s<span class="tag">仮</span></p>
-        <!-- 写真待ちの枠。写真ができたら <span>…</span> の行の下に <img src="images/history-06.jpg" alt="説明"> を1行足す -->
-        <div class="shot empty" style="aspect-ratio:1/1">
-          <span>PHOTO<br>WANTED</span>
+      <div class="hs-rule" aria-hidden="true"><span class="t">1956</span><span class="b">2026</span><i style="--p:0.343"><b>1980s</b></i></div>
+    </article>
+    <article class="hs" style="--i:5;--bg:#FFE4BC;--fg:#1B1F3B">
+      <p class="hs-tab"><span class="l">1990s</span><span class="s">'90s</span></p>
+      <div class="hs-in">
+        <figure class="hs-photo empty" style="--rot:3deg"><span>PHOTO<br>WANTED</span><figcaption>1990s</figcaption></figure>
+        <div class="hs-tx">
+          <p class="hs-yr">1990s</p><p class="hs-era">平成2年〜</p>
+          <h3 class="none"><span class="tag">仮</span></h3>
+          <p class="hs-p">※年表データ待ち</p>
         </div>
-        <!-- ✏️ 説明文 -->
-        <p class="cap">※年表データ待ち</p>
       </div>
-      <!-- ▲▲▲ 年表 6枠目 ここまで ▲▲▲ -->
-
-      <!-- ▼▼▼ 年表 7枠目 ここから ▼▼▼ -->
-      <div class="panel" style="--w:26">
-        <!-- ✏️ 年号。確定したら <span class="tag">仮</span> を消す -->
-        <p class="year">2000s<span class="tag">仮</span></p>
-        <div class="shot" style="aspect-ratio:570/352">
-          <img src="images/history-07.jpg" width="440" height="271" alt="店の記録" loading="lazy">
+      <div class="hs-rule" aria-hidden="true"><span class="t">1956</span><span class="b">2026</span><i style="--p:0.486"><b>1990s</b></i></div>
+    </article>
+    <article class="hs" style="--i:6;--bg:#212E7D;--fg:#FFFFFF">
+      <p class="hs-tab"><span class="l">2000s</span><span class="s">'00s</span></p>
+      <div class="hs-in">
+        <figure class="hs-photo" style="--rot:-4deg"><img src="images/history-07.jpg" alt="店の記録" loading="lazy"><figcaption>2000s</figcaption></figure>
+        <div class="hs-tx">
+          <p class="hs-yr">2000s</p><p class="hs-era">平成12年〜</p>
+          <h3 class="none"><span class="tag">仮</span></h3>
+          <p class="hs-p">※年表データ待ち</p>
         </div>
-        <!-- ✏️ 説明文 -->
-        <p class="cap">※年表データ待ち</p>
       </div>
-      <!-- ▲▲▲ 年表 7枠目 ここまで ▲▲▲ -->
-
-      <!-- ▼▼▼ 年表 8枠目（写真待ち） ここから ▼▼▼ -->
-      <div class="panel" style="--w:17">
-        <!-- ✏️ 年号。確定したら <span class="tag">仮</span> を消す -->
-        <p class="year">2010s<span class="tag">仮</span></p>
-        <!-- 写真待ちの枠。写真ができたら <span>…</span> の行の下に <img src="images/history-08.jpg" alt="説明"> を1行足す -->
-        <div class="shot empty" style="aspect-ratio:3/4">
-          <span>PHOTO<br>WANTED</span>
+      <div class="hs-rule" aria-hidden="true"><span class="t">1956</span><span class="b">2026</span><i style="--p:0.629"><b>2000s</b></i></div>
+    </article>
+    <article class="hs" style="--i:7;--bg:#FFFFFF;--fg:#1B1F3B">
+      <p class="hs-tab"><span class="l">2010s</span><span class="s">'10s</span></p>
+      <div class="hs-in">
+        <figure class="hs-photo empty" style="--rot:3deg"><span>PHOTO<br>WANTED</span><figcaption>2010s</figcaption></figure>
+        <div class="hs-tx">
+          <p class="hs-yr">2010s</p><p class="hs-era">平成22年〜</p>
+          <h3 class="none"><span class="tag">仮</span></h3>
+          <p class="hs-p">※年表データ待ち</p>
         </div>
-        <!-- ✏️ 説明文 -->
-        <p class="cap">※年表データ待ち</p>
       </div>
-      <!-- ▲▲▲ 年表 8枠目 ここまで ▲▲▲ -->
-
-      <!-- ▼▼▼ 年表 最後の枠（2026.10.31 ＝ 当日の写真用に空けてある枠） ここから ▼▼▼
-           感謝祭が終わったら：images に history-09.jpg を入れ、<span>…</span> の行の下に
-           <img src="images/history-09.jpg" alt="70周年感謝祭の一日"> を1行足す。手順は 編集マニュアル.md の「7」 -->
-      <div class="panel" style="--w:32">
-        <!-- ✏️ 年号 -->
-        <p class="year">2026.10.31</p>
-        <div class="shot empty" style="aspect-ratio:16/10">
-          <span>この枠は当日の写真用に<br>空けておきます</span>
+      <div class="hs-rule" aria-hidden="true"><span class="t">1956</span><span class="b">2026</span><i style="--p:0.771"><b>2010s</b></i></div>
+    </article>
+    <article class="hs" style="--i:8;--bg:#FF9900;--fg:#1B1F3B">
+      <p class="hs-tab"><span class="l">2026.10.31</span><span class="s">'26</span></p>
+      <div class="hs-in">
+        <figure class="hs-photo empty last" style="--rot:-4deg"><span>この枠は当日の写真用に<br>空けておきます</span><figcaption>2026</figcaption></figure>
+        <div class="hs-tx">
+          <p class="hs-yr">2026</p><p class="hs-era">令和8年</p>
+          <h3>70周年感謝祭</h3>
+          <p class="hs-p">姉弟がバトンを受け継ぐ。感謝祭が終わったら、この日の写真をここに入れる。告知サイトが、記録サイトに変わります。</p>
         </div>
-        <!-- ✏️ 説明文（当日の写真を入れた後は、この日のことばに書き換える） -->
-        <p class="cap">姉弟がバトンを受け継ぐ。感謝祭が終わったら、この日の写真をここに入れる。告知サイトが、記録サイトに変わります。</p>
       </div>
-      <!-- ▲▲▲ 年表 最後の枠 ここまで ▲▲▲ -->
-
-    </div>
-    <!-- ⚠️ 操作のヒント（PCとスマホで文言が切り替わる） -->
-    <div class="hint" aria-hidden="true"><span class="mouse">Scroll ／ 写真の上でカーソルを動かす</span><span class="touch">横にスワイプ ／ 写真をなぞる</span></div>
+      <div class="hs-rule" aria-hidden="true"><span class="t">1956</span><span class="b">2026</span><i style="--p:1"><b>2026</b></i></div>
+    </article>
   </div>
 </section>
 
-
-<!-- ============================================================
-     S6 EVENT INFORMATION（オレンジ全面帯・カウントダウン）
-     ============================================================ -->
-<section class="event" id="event">
-  <!-- ⚠️ 紙吹雪・提灯：編集しないでください -->
-  <div class="confetti" id="confetti" aria-hidden="true"></div>
-  <div class="event-in">
-    <div class="lanterns" aria-hidden="true"><span class="rope"></span><div class="row" id="lanterns"></div></div>
-    <p class="sub" style="color:rgba(33,46,125,.8)">Event Information</p>
-    <!-- ✏️ ここから編集できます：開催日時・場所・参加費・予約 -->
-    <p class="date">2026.10.31<br>SAT</p>
-    <p class="hours">11:00 — 16:00</p>
-    <dl>
-      <dt>Place</dt><dd>美容室LABO 店舗前・店内<br>栃木県矢板市上町15-29</dd>
-      <dt>Fee</dt><dd>無料</dd>
-      <dt>Booking</dt><dd>不要</dd>
-    </dl>
-    <!-- ✏️ ここまで -->
-
-    <!-- ⚠️ カウントダウン（黒い箱）。目標時刻は data-target="…" で指定（日本時間）。数字は自動で動きます -->
-    <div class="cdwrap">
-      <p class="cdlabel">70周年感謝祭まで、<b>あと</b></p>
-      <div class="cd" id="cd" data-target="2026-10-31T11:00:00+09:00">
-        <div><b data-cd="d">--</b><u>日</u></div>
-        <div><b data-cd="h">--</b><u>時間</u></div>
-        <div><b data-cd="m">--</b><u>分</u></div>
-        <div><b data-cd="s">--</b><u>秒</u></div>
-      </div>
-      <p class="cdnote">Countdown to 2026.10.31 11:00</p>
-      <!-- ✏️ 開催時刻を過ぎると、数字の代わりにこの文が表示されます -->
-      <p class="cddone">70周年感謝祭は終了しました。<br>ご来場いただき、ありがとうございました。</p>
-    </div>
-
-    <!-- ✏️ ここから編集できます：参加条件と注記 -->
-    <p class="free">参加費無料・予約不要。<br>どなたでもご参加いただけます。</p>
-    <p class="stamp" aria-hidden="true">Free Entry<br>No Reservation</p>
-    <div class="join">
-      <p class="join-h">参加方法</p>
-      <p>予約不要でどなたでも無料でご参加いただけます。</p>
-      <p>また、店頭でお配りしているチラシをご持参いただいた方は、<b>ワンドリンク無料</b>になります！</p>
-      <p>一般の方でご参加希望の方は、<a href="https://www.instagram.com/labo.1956/" target="_blank" rel="noopener">DM</a>／<a href="https://line.me/R/ti/p/@zgn8493r" target="_blank" rel="noopener">公式LINE</a>にて「参加希望」とメッセージをお送りください。</p>
-    </div>
-    <p class="fine">※お客様に向けた感謝祭になりますので、当店をご利用いただいたことのない方は混雑時入場規制をさせていただく可能性がございます。予めご了承ください。</p>
-    <!-- ✏️ ここまで -->
-  </div>
-</section>
-
-
-<!-- ============================================================
-     S7 CONTENTS（当日の内容 5項目）
-     ============================================================ -->
-<div class="wrapsec"><div class="wm" aria-hidden="true" style="right:-4vw;bottom:2vh">2026</div>
-<div class="nobori" aria-hidden="true"><p>感謝祭</p></div>
-<div class="dust" id="dust2" aria-hidden="true"></div>
-<section class="sec" id="contents">
-  <p class="sub">Contents</p>
-  <!-- ✏️ 見出し（文字を変える時は、data-t="…" の中も同じ文字にしておく） -->
-  <h2 class="h2 jp"><span class="gh" data-t="当日の内容">当日の内容</span></h2>
-  <!-- ✏️ ここから編集できます：当日の内容のリード文 -->
-  <p class="lead">感謝を込めたspecialな一日をお届け★</p>
-  <!-- ✏️ ここまで -->
-
-  <div style="margin-top:6vh">
-    <div class="item"><p class="num">01</p><div>
-      <!-- ✏️ ここから編集できます：Food & Drink -->
-      <h3>Food &amp; Drink</h3>
-      <p>店前がマルシェになります。</p>
-      <div class="shops">
-        <!-- ▼ 出店者リスト：1行＝1店。行をコピーしてすぐ下に貼り付けると1店増えます。
-             書き方： <div class="shop"><b>店名 <em>@インスタのID</em></b><span>提供内容</span></div>
-             （インスタのIDがない店は <em>…</em> ごと消してOK）
-             店の写真：images に shop-01.jpg のように入れて、その行の「<!－－」と「－－>」を外すと店名の上に写真が出ます（手順は 編集マニュアル.md の 4-1） -->
-        <div class="shop"><div class="sphoto"><img src="images/shop-02.jpg" alt="MYS,COFFEE" loading="lazy"></div><b>MYS,COFFEE <em>@315mys_coffee</em></b><span>Specialty coffee<br>ブルーチーズ入りバスクチーズケーキ<br>スコーン</span></div>
-        <div class="shop"><div class="sphoto"><img src="images/shop-03.jpg" alt="Small Pocket" loading="lazy"></div><b>Small Pocket <em>@smallpocket22</em></b><span>ドーナツ各種</span></div>
-        <div class="shop"><div class="sphoto"><img src="images/shop-05.jpg" alt="喫茶院アルッテ" loading="lazy"></div><b>喫茶院アルッテ <em>@kissainn_arzte_karasuyama</em></b><span>アルッテ特製キーマカレー</span></div>
-        <div class="shop"><div class="sphoto"><img src="images/shop-01.jpg" alt="タイラーメン" loading="lazy"></div><b>タイラーメン</b><span>タイラーメン</span></div>
-        <div class="shop"><div class="sphoto"><img src="images/shop-04.jpg" alt="たそがれのスペアリブ" loading="lazy"></div><b>たそがれ</b><span>スペアリブ。店舗前で週に一度営業している、父のリヤカー屋台です。</span></div>
-        <!-- ▲ 出店者リスト ここまで -->
-      </div>
-      <p style="margin-top:1.4em">ビール・ハイボール・ソフトドリンクもご用意しています。</p>
-      <p>おいしいお食事とともにお楽しみください。詳細は後ほど配信いたします。チェックをお忘れなく！</p>
-      <!-- ワンドリンク券（チケットの形） -->
-      <p class="drink">店頭でお配りしているチラシをご持参の方は、<b>ドリンク1杯無料</b>になります。</p>
-      <!-- ✏️ ここまで -->
-    </div>
-    <!-- ✏️ Food & Drink の写真（任意）：images に contents-01.jpg を入れて、下の行の「<!－－」と「－－>」を外すと表示されます（PCでは右、スマホでは文の上に出ます） -->
-    <!-- <div class="pic"><img src="images/contents-01.jpg" alt="Food & Drink" loading="lazy"></div> -->
-    </div>
-
-    <div class="item"><p class="num">02</p><div>
-      <!-- ✏️ ここから編集できます：DJ -->
-      <h3>DJ</h3>
-      <p>@naoto_shijima_shijima_ru による心地よいDJで会場を盛り上げます。</p>
-      <!-- ✏️ ここまで -->
-    </div>
-    <!-- ✏️ DJ の写真（任意）：images に contents-02.jpg を入れて、下の行の「<!－－」と「－－>」を外すと表示されます（PCでは右、スマホでは文の上に出ます） -->
-    <div class="pic"><img src="images/contents-02.jpg" alt="DJ（@naoto_shijima_shijima_ru）がプレイする様子" loading="lazy" style="object-position:50% 20%"></div>
-    </div>
-
-    <div class="item"><p class="num">03</p><div>
-      <!-- ✏️ ここから編集できます：写真展 -->
-      <h3>写真展</h3>
-      <p>旧店舗の写真など今までの当店の歴史をパネルで辿る、小さな写真展を店内で開催します。</p>
-      <!-- ✏️ ここまで -->
-    </div>
-    <!-- ✏️ 写真展 の写真（任意）：images に contents-03.jpg を入れて、下の行の「<!－－」と「－－>」を外すと表示されます（PCでは右、スマホでは文の上に出ます） -->
-    <!-- <div class="pic"><img src="images/contents-03.jpg" alt="写真展" loading="lazy"></div> -->
-    </div>
-
-    <div class="item"><p class="num">04</p><div>
-      <!-- ✏️ ここから編集できます：抽選会（時間を決めず随時開催） -->
-      <h3>抽選会</h3>
-      <p>感謝を込めてハズレ無しの抽選会を随時開催します。ヘアアイロンや美顔器など豪華景品をご用意しております！お楽しみに！！</p>
-      <!-- ✏️ ここまで -->
-      <!-- ✏️ 抽選会の景品（オレンジの枠の中に4枚）。写真は images の lottery-01〜04.jpg（正方形）を同じ名前で入れ替えると変わります。alt="…" の中は景品名 -->
-      <div class="lotbox">
-        <p class="lb-head"><span class="lb-sub">ハズレなし、</span><span class="lb-main"><b>大</b>抽選会！</span></p>
-        <div class="lb-grid">
-          <figure><img src="images/lottery-01.jpg" alt="景品：ヘアアイロン" loading="lazy"></figure>
-          <figure><img src="images/lottery-02.jpg" alt="景品：ドライヤー" loading="lazy"></figure>
-          <figure><img src="images/lottery-03.jpg" alt="景品：トリートメント" loading="lazy"></figure>
-          <figure><img src="images/lottery-04.jpg" alt="景品：美顔器" loading="lazy"></figure>
-        </div>
-      </div>
-    </div>
-    </div>
-
-    <div class="item"><p class="num">05</p><div>
-      <!-- ✏️ ここから編集できます：Original Goods -->
-      <h3>Original Goods</h3>
-      <p>感謝を込めて先着70名様に70周年記念ミニハンカチタオルをプレゼント！！お早めにご来場ください！！他にも70周年記念オリジナルTシャツも販売いたします！</p>
-      <!-- ✏️ ここまで -->
-    </div>
-    <!-- ✏️ Original Goods の写真（任意）：images に contents-05.jpg を入れて、下の行の「<!－－」と「－－>」を外すと表示されます（PCでは右、スマホでは文の上に出ます） -->
-    <div class="pic"><img src="images/contents-05.jpg" alt="70周年記念ミニハンカチタオル" loading="lazy"></div>
-    </div>
-  </div>
-</section></div>
-
-<!-- ============================================================
-     S7.5 REPORT（当日の記録）… 感謝祭が終わるまで非表示（コメントアウト）にしてあります
-     ・表示するには：すぐ下の「▼▼▼ REPORT ここから」の行と、終わりの「▲▲▲ REPORT ここまで」の行の
-       2行を両方消します（手順は 編集マニュアル.md の「8」）。片方だけ消すとページが崩れます
-     ・写真は images/report-01.jpg, report-02.jpg … の名前で入れます（そのままの色で表示。青い色調にはなりません）
-     ・1枚分は <div>…</div> の1行。コピーして貼れば増え、消せば減ります。写真の枚数に合わせて行を減らしてください
-     ・縦長の写真は class="rshot tall"、横長の写真は class="rshot"
-     ・この枠の中には「〈!－－ … －－〉」形式のメモを書けません（外側の非表示の指定が壊れるため）
-     ============================================================ -->
-<!-- ▼▼▼ REPORT ここから（この行を消すと表示されます）
-<div class="ichimatsu" aria-hidden="true"></div>
-<section class="sec" id="report">
-  <p class="sub">Report</p>
-  <h2 class="h2 jp"><span class="gh" data-t="当日の記録">当日の記録</span></h2>
-  <div class="body" style="margin-top:4vh">
-    <p>2026年10月31日。70年分のありがとうを込めた一日を、そのままの色で。</p>
-  </div>
-
-  <div class="rgrid">
-    <div><div class="rshot tall"><img src="images/report-01.jpg" alt="当日のようす" loading="lazy"></div><p class="rcap">店の前</p></div>
-    <div><div class="rshot"><img src="images/report-02.jpg" alt="当日のようす" loading="lazy"></div><p class="rcap">マルシェ</p></div>
-    <div><div class="rshot"><img src="images/report-03.jpg" alt="当日のようす" loading="lazy"></div><p class="rcap">DJ</p></div>
-    <div><div class="rshot"><img src="images/report-04.jpg" alt="当日のようす" loading="lazy"></div><p class="rcap">たそがれ</p></div>
-    <div><div class="rshot tall"><img src="images/report-05.jpg" alt="当日のようす" loading="lazy"></div><p class="rcap">写真展</p></div>
-    <div><div class="rshot"><img src="images/report-06.jpg" alt="当日のようす" loading="lazy"></div><p class="rcap">抽選会</p></div>
-    <div><div class="rshot"><img src="images/report-07.jpg" alt="当日のようす" loading="lazy"></div><p class="rcap">スタッフ</p></div>
-    <div><div class="rshot"><img src="images/report-08.jpg" alt="当日のようす" loading="lazy"></div><p class="rcap">引きの1枚</p></div>
-  </div>
-
-  <p class="rnote">来てくださった皆さま、出店してくださった皆さま、音楽で場をつくってくれた四十万さん、そして駐車場を貸してくださった皆さま。本当にありがとうございました。<br>12月で、創業から満70年になります。ここからの一年も、変わらずこの場所でやっていきます。</p>
-</section>
-▲▲▲ REPORT ここまで（この行を消すと表示されます） -->
-
-<div class="ichimatsu k" aria-hidden="true"></div>
-
-
-<!-- ============================================================
-     S8 ACCESS（住所・地図リンク・駐車場）
-     ============================================================ -->
-<section class="sec" id="access">
-  <p class="sub">Access</p>
-  <h2 class="h2"><span class="gh" data-t="ACCESS">ACCESS</span></h2>
-  <div class="body" style="margin-top:5vh">
-    <!-- ✏️ ここから編集できます：住所 -->
-    <p>美容室LABO<br>栃木県矢板市上町15-29</p>
-    <!-- ✏️ ここまで -->
-  </div>
-  <!-- ✏️ 地図ボタン。Googleマップの公式な「検索URL」形式（店名＋住所）。短縮URL（maps.app.goo.gl）はiPhoneのGoogleマップアプリで「サポートされていないリンク」になるため使わない -->
-  <a class="map" href="https://www.google.com/maps/search/?api=1&query=%E7%BE%8E%E5%AE%B9%E5%AE%A4LABO+%E6%A0%83%E6%9C%A8%E7%9C%8C%E7%9F%A2%E6%9D%BF%E5%B8%82%E4%B8%8A%E7%94%BA15-29" target="_blank" rel="noopener">Google マップで開く</a>
-
-  <div class="park">
-    <h3>ご来場に際してのお願い</h3>
-    <!-- ✏️ ここから編集できます：駐車場の案内（1項目＝<li> … </li>） -->
-    <ul>
-      <li>会場付近の駐車スペースは、店舗近くの砂利駐車場・空き地に止めていただきますようお願いいたします。</li>
-      <li>混雑時は臨時駐車場として、徒歩3分圏内にある<b>矢板中学校職員駐車場（体育館横）</b>をご利用下さい。</li>
-      <li>また、路上駐車は近隣住民様のご迷惑となりますのでご遠慮ください。</li>
+<!-- ================= SPECIAL THANKS（ロゴが右から左へ流れる。並びは会社名のあいうえお順：
+     アルマダ（ARMADA）・かすが（K・S・G）・きくや美粧堂・シンビ・綜合美容サンテック・ナプラ・ビーエイチ・フソー・レスティ。
+     style="--h:…" は表示の高さ(px)。縦横比はそのままで、見た目の大きさ（面積）が揃うよう1つずつ決めてある。ロゴは色・形を変えない。
+     ロゴのない会社は文字で表示（<li class="lm-text">…</li>。--fs は文字の大きさ） ================= -->
+<section class="thanks" aria-labelledby="thanksTtl">
+  <p class="label" id="thanksTtl" data-scramble>SPECIAL THANKS</p>
+  <div class="logo-marq">
+    <ul class="lm-track">
+      <li><img src="images/sponsor-01-armada.png" alt="ARMADA" style="--h:33.6" width="209" height="34"></li>
+      <li><img src="images/sponsor-02-ksg.png" alt="K・S・G（かすが）" style="--h:46.3" width="151" height="46"></li>
+      <li><img src="images/sponsor-03-kikuya.png" alt="株式会社きくや美粧堂" style="--h:33.1" width="212" height="33"></li>
+      <li><img src="images/sponsor-04-shinbi.png" alt="Shinbi International" style="--h:55" width="127" height="55"></li>
+      <li class="lm-text" style="--fs:22"><span><small>有限会社</small>綜合美容サンテック</span></li>
+      <li><img src="images/sponsor-06-napla.png" alt="napla" style="--h:53" width="140" height="53"></li>
+      <li><img src="images/sponsor-07-bh.svg" alt="株式会社ビーエイチ" style="--h:60" width="115" height="60"></li>
+      <li class="lm-text" style="--fs:34"><span><small>株式会社</small>フソー</span></li>
+      <li><img src="images/sponsor-09-resty.png" alt="Resty" style="--h:72" width="54" height="72"></li>
     </ul>
-    <!-- ✏️ ここまで -->
   </div>
 </section>
 
+<!-- ================= CONTACT ＋ フッター ================= -->
+<section class="contact" id="contact">
+  <div class="ct-bg" aria-hidden="true"><span>SEE YOU</span><span>ON 10.31</span><span>LABO 70TH</span></div>
+  <h2 class="ct-h"><span>SEE YOU</span><span class="o">on 10.31</span></h2>
+  <p class="ct-tx">#70年分のありがとうを込めて。</p>
+  <div class="ct-btns"><a class="btn light" href="https://www.instagram.com/labo.1956/" target="_blank" rel="noopener"><span>INSTAGRAM</span><i aria-hidden="true">→</i></a><a class="btn light" href="https://line.me/R/ti/p/@zgn8493r" target="_blank" rel="noopener"><span>LINE</span><i aria-hidden="true">→</i></a></div>
+</section>
 
 </main>
 
-<!-- ============================================================
-     S9 フッター（店舗情報・SNS）
-     ============================================================ -->
-<footer class="site-foot">
-  <!-- ✏️ ここから編集できます：店舗情報 -->
-  <p class="name">Hair Salon LABO</p>
-  <p class="info">〒329-2123 栃木県矢板市上町15-29<br>Since 1956</p>
-  <!-- ✏️ ここまで -->
-  <!-- ✏️ SNSリンク：href="…" の中が Instagram / 公式LINE のURL（LINEは短縮URL lin.ee ではなく line.me の正式なURL。lin.ee は広告ブロッカーに隠されることがある） -->
-  <div class="sns"><a href="https://www.instagram.com/labo.1956/" target="_blank" rel="noopener">Instagram</a><a href="https://line.me/R/ti/p/@zgn8493r" target="_blank" rel="noopener">LINE</a></div>
-  <!-- ✏️ ハッシュタグ -->
-  <p class="hash">#70年分のありがとうを込めて。</p>
+<footer class="ft">
+  <div class="ft-marq" aria-hidden="true"><div class="fm-track" id="fmTrack"><span class="f1">Thank you</span><span class="f2">70TH ANNIVERSARY.</span><span class="f3">LABO</span><span class="f1">Thank you</span><span class="f2">70TH ANNIVERSARY.</span><span class="f3">LABO</span></div></div>
+  <div class="ft-card">
+    <div class="ft-top">
+      <p class="ft-logo">LABO<small>HAIR SALON — SINCE 1956</small></p>
+      <div class="ft-cols">
+        <div><p>MESSAGE</p><a href="#message">70年分のありがとうを。</a></div>
+        <div><p>CONTENTS</p><a href="#contents">当日の内容</a><a href="#shops">出店者</a></div>
+        <div><p>EVENT</p><a href="#event" data-slide="0">日時</a><a href="#event" data-slide="2">アクセス</a></div>
+        <div><p>STAFF</p><a href="#staff">スタッフ</a><a href="#history">LABOのあゆみ</a></div>
+      </div>
+    </div>
+    <canvas class="ft-strip" id="ftStrip" aria-hidden="true"></canvas>
+    <div class="ft-bottom"><p>〒329-2123 栃木県矢板市上町15-29</p><p>© LABO</p></div>
+  </div>
 </footer>
 
-<!-- ⚠️ ここから下（進行バー・回転バッジ・固定ボタン・年号カウンター）は編集しないでください -->
-<div class="pageprog" id="pageprog" aria-hidden="true"></div>
-<div class="badge" aria-hidden="true">
-  <svg viewBox="0 0 120 120">
-    <defs><path id="cir" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
-    <text><textPath href="#cir">70TH ANNIVERSARY ✱ 1956—2026 ✱ LABO ✱ </textPath></text>
-  </svg>
-  <div class="dot"></div>
-</div>
-<a class="jump" href="#event">開催概要を見る</a>
-<div class="counter" id="counter" aria-hidden="true">1956</div>
-<div class="progress" id="progress" aria-hidden="true"></div>
-<!-- ⚠️ ここまで -->
+<a class="jump" href="#event" data-slide="0"><span>開催概要</span><i aria-hidden="true">→</i></a>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
 
 </body>
 </html>
