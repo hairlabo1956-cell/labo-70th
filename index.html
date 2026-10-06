@@ -43,6 +43,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<!-- 抽選会の見出し「ハズレなし、大抽選会！」だけに使う太い書体（使う文字だけを読み込む） -->
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&text=%E3%83%8F%E3%82%BA%E3%83%AC%E3%81%AA%E3%81%97%E3%80%81%E5%A4%A7%E6%8A%BD%E9%81%B8%E4%BC%9A%EF%BC%81&display=swap" rel="stylesheet">
 <!-- 日本語の2書体（Shippori Mincho / Noto Sans JP）は script.js がページ内の文字だけを含む形で読み込む（分割ファイル約60個→2個）。JSが使えない環境向けの予備が下の noscript -->
 <noscript><link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho&family=Noto+Sans+JP&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="style.css">
@@ -535,9 +537,17 @@
       <h3>抽選会</h3>
       <p>感謝を込めてハズレ無しの抽選会を随時開催します。ヘアアイロンや美顔器など豪華景品をご用意しております！お楽しみに！！</p>
       <!-- ✏️ ここまで -->
+      <!-- ✏️ 抽選会の景品（オレンジの枠の中に4枚）。写真は images の lottery-01〜04.jpg（正方形）を同じ名前で入れ替えると変わります。alt="…" の中は景品名 -->
+      <div class="lotbox">
+        <p class="lb-head"><span class="lb-sub">ハズレなし、</span><span class="lb-main"><b>大</b>抽選会！</span></p>
+        <div class="lb-grid">
+          <figure><img src="images/lottery-01.jpg" alt="景品：ヘアアイロン" loading="lazy"></figure>
+          <figure><img src="images/lottery-02.jpg" alt="景品：ドライヤー" loading="lazy"></figure>
+          <figure><img src="images/lottery-03.jpg" alt="景品：トリートメント" loading="lazy"></figure>
+          <figure><img src="images/lottery-04.jpg" alt="景品：美顔器" loading="lazy"></figure>
+        </div>
+      </div>
     </div>
-    <!-- ✏️ 抽選会 の写真（任意）：images に contents-04.jpg を入れて、下の行の「<!－－」と「－－>」を外すと表示されます（PCでは右、スマホでは文の上に出ます） -->
-    <div class="pic"><img src="images/contents-04.jpg" alt="抽選会の景品のヘアアイロン" loading="lazy" style="object-position:50% 80%"></div>
     </div>
 
     <div class="item"><p class="num">05</p><div>
