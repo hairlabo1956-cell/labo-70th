@@ -250,6 +250,7 @@
      ========================================================= */
   function layout(){
     vh=window.innerHeight; vw=window.innerWidth;
+    if(typeof fitHS==='function') fitHS();
     if(typeof odoPin!=='undefined') odoPin.style.setProperty('--oh',odoSticky.offsetHeight+'px');
     if(gallery){ gallery.size(); wPin.style.height=(vh+gallery.travel*1.25+vh*.25)+'px'; }
     sheetPin.style.height=(vh*(slides.length+.4))+'px';
@@ -267,7 +268,30 @@
   setYear(1956);
   odoPin.style.setProperty('--oh',odoSticky.offsetHeight+'px');
   /* 年表のシート：入ってきたら中身が出る・いま見ているタブを太字に */
-  var sheets=[].slice.call(doc.querySelectorAll('.hs')), tabs=sheets.map(function(s){ return s.querySelector('.hs-tab'); });
+  var sheets=[].slice.call(doc.querySelectorAll('.hs')), tabs=sheets.map(function(s){ return s.querySelector('.hs-tab'); }), hsStack=doc.querySelector('.hs-stack');
+  /* 年表の写真を「文章を置いた残りの場所」いっぱいの大きさにする（縦横比はそのまま。スマホで文章が画面の外に出ないように） */
+  function px(v){ return parseFloat(v)||0; }
+  function fitHS(){
+    if(!sheets) return;
+    sheets.forEach(function(s){
+      var inn=s.querySelector('.hs-in'), tx=s.querySelector('.hs-tx'), cs=getComputedStyle(inn);
+      var cols=cs.gridTemplateColumns.split(' ').filter(Boolean), one=cols.length<2;
+      var inH=inn.clientHeight-px(cs.paddingTop)-px(cs.paddingBottom), inW=inn.clientWidth-px(cs.paddingLeft)-px(cs.paddingRight);
+      var aH=(one?inH-tx.offsetHeight-px(cs.rowGap):inH)-14, aW=one?inW:px(cols[0]);
+      var pair=s.querySelector('.hs-pair');
+      if(pair){
+        var im=pair.querySelector('.a img'), fs=getComputedStyle(im.parentNode), fv=px(fs.paddingTop)+px(fs.paddingBottom), fh=px(fs.paddingLeft)+px(fs.paddingRight), ar=(+im.getAttribute('width'))/(+im.getAttribute('height'));
+        var w=(aH-fv+fh/ar)/(.64/ar+.3); var pw=Math.round(Math.max(120,Math.min(aW,w,720))); pair.style.width=pw+'px'; pair.style.paddingBottom=Math.round(pw*.3)+'px';  /* % の padding は親の幅基準になるので px で */
+      } else {
+        var img=s.querySelector('.hs-photo img'); if(!img) return;
+        var f=getComputedStyle(img.parentNode), fv2=px(f.paddingTop)+px(f.paddingBottom), fh2=px(f.paddingLeft)+px(f.paddingRight), ar2=(+img.getAttribute('width'))/(+img.getAttribute('height'));
+        var hh=Math.max(120,Math.min(aH-fv2,(aW-fh2)/ar2,680));
+        img.style.height=Math.round(hh)+'px'; img.style.width=Math.round(hh*ar2)+'px';
+      }
+      s.classList.add('fit');
+    });
+  }
+  fitHS();
   if('IntersectionObserver' in window&&!reduced){ var hio=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); hio.unobserve(e.target); } }); },{threshold:.3}); sheets.forEach(function(s){ hio.observe(s); }); }
   else sheets.forEach(function(s){ s.classList.add('in'); });
   var stStage=doc.getElementById('stStage'), sps=[].slice.call(doc.querySelectorAll('.sp'));
@@ -325,7 +349,7 @@
     if(sheet){ var s2=sheet.getBoundingClientRect(), er=darkEls[1].getBoundingClientRect(); if(er.top<=40&&er.bottom>40&&s2.top<=40&&s2.bottom>40) dark=false; }
     body.classList.toggle('on-dark',dark);
     /* 開催概要ボタン：EVENT・CONTACT の間は隠す */
-    var ev=darkEls[1].getBoundingClientRect(); jump.classList.toggle('hide',(ev.top<vh*.6&&ev.bottom>vh*.4)||cr2.top<vh*.7||y<vh*.5);
+    var ev=darkEls[1].getBoundingClientRect(); var hsr=hsStack.getBoundingClientRect(); jump.classList.toggle('hide',(ev.top<vh*.6&&ev.bottom>vh*.4)||(hsr.top<vh*.92&&hsr.bottom>vh*.08)||cr2.top<vh*.7||y<vh*.5);  /* 年表は止まったまま読むので、その間はボタンを隠す */
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
