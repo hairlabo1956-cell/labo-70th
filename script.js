@@ -285,7 +285,7 @@
       } else {
         var img=s.querySelector('.hs-photo img'); if(!img) return;
         var f=getComputedStyle(img.parentNode), fv2=px(f.paddingTop)+px(f.paddingBottom), fh2=px(f.paddingLeft)+px(f.paddingRight), ar2=(+img.getAttribute('width'))/(+img.getAttribute('height'));
-        var hh=Math.max(120,Math.min(aH-fv2,(aW-fh2)/ar2,680));
+        var hh=Math.max(90,Math.min(aH-fv2,(aW-fh2)/ar2,680));
         img.style.height=Math.round(hh)+'px'; img.style.width=Math.round(hh*ar2)+'px';
       }
       s.classList.add('fit');
