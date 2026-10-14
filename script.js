@@ -277,7 +277,7 @@
       var inn=s.querySelector('.hs-in'), tx=s.querySelector('.hs-tx'), cs=getComputedStyle(inn);
       var cols=cs.gridTemplateColumns.split(' ').filter(Boolean), one=cols.length<2;
       var inH=inn.clientHeight-px(cs.paddingTop)-px(cs.paddingBottom), inW=inn.clientWidth-px(cs.paddingLeft)-px(cs.paddingRight);
-      var aH=(one?inH-tx.offsetHeight-px(cs.rowGap):inH)-14, aW=one?inW:px(cols[0]);
+      var aH=(one?inH-tx.offsetHeight-px(cs.rowGap):inH)-14, aW=(one?inW:px(cols[0]))*.9;  /* 写真は傾けて置くので、角がはみ出さないよう少し狭く */
       var pair=s.querySelector('.hs-pair');
       if(pair){
         var im=pair.querySelector('.a img'), fs=getComputedStyle(im.parentNode), fv=px(fs.paddingTop)+px(fs.paddingBottom), fh=px(fs.paddingLeft)+px(fs.paddingRight), ar=(+im.getAttribute('width'))/(+im.getAttribute('height'));
