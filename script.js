@@ -12,7 +12,8 @@
      ・スマホ（縦長）は「70」の周りだけを表示範囲にして大きく見せる
      ========================================================= */
   var loader=doc.getElementById('loader');
-  function ready(){ body.classList.add('ready'); setTimeout(function(){ doc.getElementById('heroCards').classList.add('live'); },1900); }
+  function ready(){ body.classList.add('ready'); setTimeout(function(){ doc.getElementById('heroCards').classList.add('live'); heroLive=true; dirty=true; },1900); }
+  var heroLive=false, dirty=true;
   var LD_PATH='M -60 650 C 160 660, 300 560, 400 440 C 460 360, 480 300, 525 300 L 755 300 C 700 400, 640 520, 605 640 C 598 690, 700 702, 800 662 C 860 642, 900 642, 940 642 C 1018 642, 1075 565, 1075 470 C 1075 375, 1018 298, 940 298 C 865 298, 805 370, 805 470 C 805 565, 862 646, 940 646 C 1030 650, 1120 670, 1260 640 S 1520 590, 1680 610';
   /* 縦長の画面（スマホ・タブレット縦）用：線の始まりと終わりも画面の内側に収める短い線。表示範囲は線の大きさから毎回計算する */
   var LD_PATH_SP='M 525 300 L 755 300 C 700 400, 640 520, 605 640 C 598 690, 700 702, 800 662 C 860 642, 900 642, 940 642 C 1018 642, 1075 565, 1075 470 C 1075 375, 1018 298, 940 298 C 865 298, 805 370, 805 470 C 805 565, 862 646, 940 646 C 1010 650, 1070 658, 1125 650';
@@ -158,7 +159,7 @@
     };
     return self;
   }
-  function loadImg(src){ return new Promise(function(res){ var i=new Image(); if(/contents-02/.test(src)) i.setAttribute('data-pos','50% 20%'); i.onload=function(){ res(i); }; i.onerror=function(){ res(null); }; i.src=src; }); }
+  function loadImg(src){ return new Promise(function(res){ var i=new Image(); if(/contents-02/.test(src)) i.setAttribute('data-pos','50% 20%'); if(/hero\.jpg/.test(src)) i.setAttribute('data-pos','50% 0%'); i.onload=function(){ res(i); }; i.onerror=function(){ res(null); }; i.src=src; }); }
 
   /* 生成するカード（写真のない項目） */
   var GEN={
@@ -209,7 +210,7 @@
   }).then(function(list){
     gEntries=list.filter(function(e){ return e.img; });
     gallery=Curve(wCanvas,gEntries,{cw:function(W){ return W<700?W*.66:Math.min(W*.3,520); },ratio:.68,gap:.14,cy:.56,bend:.34});
-    layout();
+    layout(true);
   });
 
   /* 年表の帯（フッターの曲面の写真） */
@@ -248,17 +249,6 @@
   /* =========================================================
      レイアウト（ピン留めの長さ）とスクロールに合わせた動き
      ========================================================= */
-  function layout(){
-    vh=window.innerHeight; vw=window.innerWidth;
-    if(typeof fitHS==='function') fitHS();
-    if(typeof odoPin!=='undefined') odoPin.style.setProperty('--oh',odoSticky.offsetHeight+'px');
-    if(gallery){ gallery.size(); wPin.style.height=(vh+gallery.travel*1.25+vh*.25)+'px'; }
-    sheetPin.style.height=(vh*(slides.length+.4))+'px';
-    if(strip) strip.size();
-  }
-  window.addEventListener('resize',function(){ clearTimeout(layout.t); layout.t=setTimeout(layout,150); });
-  window.addEventListener('load',layout); layout();
-
   var heroCards=[].slice.call(doc.querySelectorAll('.hc')), heroWrap=doc.querySelector('.hero-type-wrap'), blTrack=doc.getElementById('blTrack');
   var concept=doc.getElementById('message');
   /* 1956 → 2026 の回転式カウンター */
@@ -299,57 +289,94 @@
   var darkEls=[doc.getElementById('contents'),doc.getElementById('event'),doc.getElementById('staff'),contact,doc.querySelector('.ft')], sheet=doc.querySelector('.sheet');
   var jump=doc.querySelector('.jump');
 
+  /* =========================================================
+     レイアウト（ピン留めの長さ）と、位置の計測
+     ・スマホのアドレスバーが出入りすると画面の高さが少し変わるが、その時は何もしない（ページの長さが変わって中身が前後するのを防ぐ）
+     ・各区画の位置はここでまとめて測っておき、スクロール中は測り直さない（カクつき防止）
+     ========================================================= */
+  var touch=window.matchMedia('(hover: none)').matches, lastW=-1, O=null;
+  function box(el,sy){ var r=el.getBoundingClientRect(); return {t:r.top+sy,h:r.height}; }
+  function measure(){
+    var sy=window.scrollY;
+    O={concept:box(concept,sy), odo:box(odoPin,sy), odoTop:parseFloat(getComputedStyle(odoSticky).top)||0, odoH:odoSticky.offsetHeight,
+       read:box(read,sy), bl:box(blTrack.parentNode,sy), w:box(wPin,sy), sp:box(sheetPin,sy), sheetH:sheet?sheet.offsetHeight:0,
+       st:box(stStage,sy), hs:box(hsStack,sy), ct:box(contact,sy), ft:box(ftCanvas,sy), dark:darkEls.map(function(el){ return box(el,sy); }),
+       hsTops:[], hsStick:sheets.length?parseFloat(getComputedStyle(sheets[0]).top)||0:0};
+    var acc=O.hs.t+(parseFloat(getComputedStyle(hsStack).paddingTop)||0);
+    sheets.forEach(function(s){ O.hsTops.push(acc); acc+=s.offsetHeight; });
+    dirty=true;
+  }
+  function layout(force){
+    var w=window.innerWidth, h=window.innerHeight;
+    if(!force&&touch&&Math.abs(w-lastW)<2&&Math.abs(h-vh)<160) return;
+    lastW=w; vh=h; vw=w;
+    fitHS();
+    odoPin.style.setProperty('--oh',odoSticky.offsetHeight+'px');
+    if(gallery){ gallery.size(); gDrawn=false; wPin.style.height=(vh+gallery.travel*1.25+vh*.25)+'px'; }
+    sheetPin.style.height=(vh*(slides.length+.4))+'px';
+    if(strip) strip.size();
+    measure();
+  }
+  var mT=0; function remeasure(){ cancelAnimationFrame(mT); mT=requestAnimationFrame(measure); }
+  window.addEventListener('resize',function(){ clearTimeout(layout.t); layout.t=setTimeout(function(){ layout(false); },150); });
+  window.addEventListener('load',function(){ layout(true); });
+  if(doc.fonts&&doc.fonts.ready) doc.fonts.ready.then(remeasure);
+  if('ResizeObserver' in window) new ResizeObserver(remeasure).observe(body);  /* 写真の読み込みなどでページの長さが変わった時だけ測り直す */
+  layout(true);
+
+  /* =========================================================
+     スクロールに合わせた動き（ここでは要素の位置を測らない）
+     ========================================================= */
+  var lastY=-1, gDrawn=false, curTab=-2, heroCardsEl=doc.getElementById('heroCards');
+  function inView(b,y){ return b.t-y<vh&&b.t+b.h-y>0; }
   function frame(){
     var y=window.scrollY;
-    /* ヒーロー：写真が上がって傾く・大きな文字はゆっくり */
-    if(y<vh*1.4){
-      heroWrap.style.transform='translate3d(0,'+(y*.35)+'px,0)'; heroWrap.style.opacity=clamp(1-y/(vh*.9),0,1);
-      if(doc.getElementById('heroCards').classList.contains('live')) heroCards.forEach(function(c,i){ var sp=[.9,1.25,1.05,.8][i]; c.style.setProperty('--ty',(-y*sp)+'px'); c.style.setProperty('--sc',1+y/vh*.12); });
-    }
-    /* MESSAGE：年が 1956 → 2026 と進む */
-    var cr=concept.getBoundingClientRect();
-    if(cr.top<vh&&cr.bottom>0){
-      /* かたまりが止まり始めてから止まり終わるまでで 0→1（少し手前から進め始める） */
-      var orr=odoPin.getBoundingClientRect(), oTop=parseFloat(getComputedStyle(odoSticky).top)||0, oTravel=Math.max(1,odoPin.offsetHeight-odoSticky.offsetHeight), op=clamp((oTop-orr.top+vh*.15)/oTravel,0,1);
-      setYear(Math.round(1956+70*op)); odoBar.style.setProperty('--p',op.toFixed(3)); odoJp.classList.toggle('on',op>.97);
-      /* 読むと濃くなる */
-      var rr=read.getBoundingClientRect(), p=clamp((vh*.86-rr.top)/(rr.height+vh*.86-vh*.42),0,1), k=Math.round(p*chars.length);
-      if(k!==litCount){ var a=Math.min(k,litCount), b=Math.max(k,litCount); for(var i=a;i<b;i++) chars[i].classList.toggle('on',i<k); litCount=k; marks.forEach(function(m){ m.p.classList.toggle('lit',k>m.last); }); }
-    }
-    /* 流れる大文字 */
-    var br=blTrack.parentNode.getBoundingClientRect();
-    if(br.top<vh&&br.bottom>0) blTrack.style.transform='translate3d('+(-(vh-br.top)*.6)+'px,0,0)';
-    /* 曲面ギャラリー */
-    if(gallery){
-      var pr=wPin.getBoundingClientRect(), len=wPin.offsetHeight-vh;
-      if(pr.top<vh&&pr.bottom>0){
-        var gp=clamp(-pr.top/len,0,1); gallery.offset=gp*gallery.travel;
-        gallery.cur=lerp(gallery.cur,gallery.offset,.14); if(Math.abs(gallery.cur-gallery.offset)<.3) gallery.cur=gallery.offset;
-        gallery.draw();
-        var idx=clamp(Math.round(gallery.cur/gallery.step),0,gEntries.length-1); setItem(gEntries[idx].item);
-        wTicks.style.transform='translate3d('+(-(gallery.cur*.5)%8)+'px,0,0)';
+    if(O&&(y!==lastY||dirty)){
+      lastY=y; dirty=false;
+      /* ヒーロー：写真が上がって傾く・大きな文字はゆっくり */
+      if(y<vh*1.4){
+        heroWrap.style.transform='translate3d(0,'+(y*.35)+'px,0)'; heroWrap.style.opacity=clamp(1-y/(vh*.9),0,1);
+        if(heroLive) heroCards.forEach(function(c,i){ var sp=[.9,1.25,1.05,.8][i]; c.style.setProperty('--ty',(-y*sp)+'px'); c.style.setProperty('--sc',1+y/vh*.12); });
       }
+      /* MESSAGE：年が 1956 → 2026 と進む・読むと濃くなる */
+      if(inView(O.concept,y)){
+        var op=clamp((O.odoTop-(O.odo.t-y)+vh*.15)/Math.max(1,O.odo.h-O.odoH),0,1);
+        setYear(Math.round(1956+70*op)); odoBar.style.setProperty('--p',op.toFixed(3)); odoJp.classList.toggle('on',op>.97);
+        var p=clamp((vh*.86-(O.read.t-y))/(O.read.h+vh*.86-vh*.42),0,1), k=Math.round(p*chars.length);
+        if(k!==litCount){ var a=Math.min(k,litCount), b=Math.max(k,litCount); for(var i=a;i<b;i++) chars[i].classList.toggle('on',i<k); litCount=k; marks.forEach(function(m){ m.p.classList.toggle('lit',k>m.last); }); }
+      }
+      /* 流れる大文字 */
+      if(inView(O.bl,y)) blTrack.style.transform='translate3d('+(-(vh-(O.bl.t-y))*.6)+'px,0,0)';
+      /* 曲面ギャラリー：進み具合だけ決める（描くのは下） */
+      if(gallery&&inView(O.w,y)) gallery.offset=clamp((y-O.w.t)/Math.max(1,O.w.h-vh),0,1)*gallery.travel;
+      /* EVENT の切り替え */
+      if(inView(O.sp,y)) setSlide(clamp(Math.floor(clamp((y-O.sp.t)/Math.max(1,O.sp.h-vh),0,.999)*slides.length),0,slides.length-1));
+      /* STAFF：似顔絵がそれぞれの速さで動く */
+      if(inView(O.st,y)){ var q=(O.st.t-y+O.st.h/2-vh/2)/vh; sps.forEach(function(s){ s.style.setProperty('--py',(q*+s.getAttribute('data-depth')*-420)+'px'); }); }
+      /* 年表：いま見ているシートのタブ */
+      var cur=-1; for(var n=0;n<O.hsTops.length;n++){ if(y>=O.hsTops[n]-O.hsStick-2) cur=n; }
+      if(cur!==curTab){ curTab=cur; tabs.forEach(function(t,i){ t.classList.toggle('cur',i===cur); }); }
+      /* CONTACT：背景の大きな文字が左右に流れる */
+      var ctTop=O.ct.t-y;
+      if(inView(O.ct,y)){ var mm=(vh-ctTop)*.35; ctRows.forEach(function(s,i){ s.style.transform='translate3d('+((i%2?1:-1)*mm-(i%2?vw*.4:0))+'px,0,0)'; }); }
+      /* ヘッダーの文字色（暗い区画の上では白。EVENT の白いカードの上では元の色） */
+      var dark=false; O.dark.forEach(function(d){ var t=d.t-y; if(t<=40&&t+d.h>40) dark=true; });
+      var ev=O.dark[1], evTop=ev.t-y;
+      if(sheet&&evTop<=40&&evTop+ev.h>40){ var sTop=Math.min(Math.max(O.sp.t-y,0),O.sp.t+O.sp.h-y-O.sheetH); if(sTop<=40&&sTop+O.sheetH>40) dark=false; }
+      body.classList.toggle('on-dark',dark);
+      /* 開催概要ボタン：EVENT・年表・CONTACT の間は隠す（年表は止まったまま読むので） */
+      var hsTop=O.hs.t-y;
+      jump.classList.toggle('hide',(evTop<vh*.6&&evTop+ev.h>vh*.4)||(hsTop<vh*.92&&hsTop+O.hs.h>vh*.08)||ctTop<vh*.7||y<vh*.5);
     }
-    /* EVENT の切り替え */
-    var sr=sheetPin.getBoundingClientRect(), sl=sheetPin.offsetHeight-vh;
-    if(sr.top<vh&&sr.bottom>0) setSlide(clamp(Math.floor(clamp(-sr.top/sl,0,.999)*slides.length),0,slides.length-1));
-    /* STAFF：似顔絵がそれぞれの速さで動く */
-    var tr=stStage.getBoundingClientRect();
-    if(tr.top<vh&&tr.bottom>0){ var q=(tr.top+tr.height/2-vh/2)/vh; sps.forEach(function(s){ s.style.setProperty('--py',(q*+s.getAttribute('data-depth')*-420)+'px'); }); }
-    /* 年表：いま見ているシートのタブ */
-    var cur=-1, stTop=sheets.length?parseFloat(getComputedStyle(sheets[0]).top):0; sheets.forEach(function(s,i){ if(s.getBoundingClientRect().top<=stTop+2) cur=i; });
-    tabs.forEach(function(t,i){ t.classList.toggle('cur',i===cur); });
-    /* CONTACT：背景の大きな文字が左右に流れる */
-    var cr2=contact.getBoundingClientRect();
-    if(cr2.top<vh&&cr2.bottom>0){ var m=(vh-cr2.top)*.35; ctRows.forEach(function(s,i){ s.style.transform='translate3d('+((i%2?1:-1)*m-(i%2?vw*.4:0))+'px,0,0)'; }); }
-    /* フッターの曲面の帯（ゆっくり自動で流れる） */
-    if(strip){ var fr=ftCanvas.getBoundingClientRect(); if(fr.top<vh&&fr.bottom>0){ strip.cur+=.6; if(strip.cur>strip.step*13) strip.cur-=strip.step*9; strip.draw(); } }
-    /* ヘッダーの文字色（暗い区画の上では白） */
-    var dark=false; darkEls.forEach(function(el){ var r=el.getBoundingClientRect(); if(r.top<=40&&r.bottom>40) dark=true; });
-    if(sheet){ var s2=sheet.getBoundingClientRect(), er=darkEls[1].getBoundingClientRect(); if(er.top<=40&&er.bottom>40&&s2.top<=40&&s2.bottom>40) dark=false; }
-    body.classList.toggle('on-dark',dark);
-    /* 開催概要ボタン：EVENT・CONTACT の間は隠す */
-    var ev=darkEls[1].getBoundingClientRect(); var hsr=hsStack.getBoundingClientRect(); jump.classList.toggle('hide',(ev.top<vh*.6&&ev.bottom>vh*.4)||(hsr.top<vh*.92&&hsr.bottom>vh*.08)||cr2.top<vh*.7||y<vh*.5);  /* 年表は止まったまま読むので、その間はボタンを隠す */
+    /* 曲面ギャラリーを描く（スクロールが止まっても、目標の位置まで少しずつ追いつく） */
+    if(gallery&&O&&inView(O.w,y)&&(!gDrawn||Math.abs(gallery.cur-gallery.offset)>.3)){
+      gallery.cur=lerp(gallery.cur,gallery.offset,.14); if(Math.abs(gallery.cur-gallery.offset)<.3) gallery.cur=gallery.offset;
+      gallery.draw(); gDrawn=true;
+      var idx=clamp(Math.round(gallery.cur/gallery.step),0,gEntries.length-1); setItem(gEntries[idx].item);
+      wTicks.style.transform='translate3d('+(-(gallery.cur*.5)%8)+'px,0,0)';
+    }
+    /* フッターの曲面の帯（見えている間はゆっくり自動で流れる） */
+    if(strip&&O&&inView(O.ft,y)){ strip.cur+=.6; if(strip.cur>strip.step*13) strip.cur-=strip.step*9; strip.draw(); }
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);

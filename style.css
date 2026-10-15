@@ -130,7 +130,7 @@ ul,ol{list-style:none}
 .hero-cards .hc{opacity:0;--ty:60vh}
 .ready .hero-cards .hc{opacity:1;--ty:0px;transition:transform 1.3s var(--ease),opacity .6s}
 .ready .hero-cards .c1{transition-delay:.25s}.ready .hero-cards .c2{transition-delay:.35s}.ready .hero-cards .c3{transition-delay:.45s}.ready .hero-cards .c4{transition-delay:.55s}
-.hero-cards.live .hc{transition:transform .15s linear,opacity .6s}
+.hero-cards.live .hc{transition:opacity .6s}  /* 位置はスクロールに合わせて毎コマ更新するので、遅れて追う動きは付けない（スマホでのカクつき防止） */
 .scroll-cue{position:absolute;left:var(--pad);bottom:22px;z-index:3;display:none}
 
 /* ---------------- MESSAGE ---------------- */
