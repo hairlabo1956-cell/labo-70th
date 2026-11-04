@@ -420,12 +420,9 @@ ul,ol{list-style:none}
 }
 
 /* ---------------- 指でスクロールする画面（スマホ・タブレット） ----------------
-   iPhone のスクロールは JavaScript とは別に動くので、スクロールに合わせて JavaScript で縦の位置を動かすと前後に揺れて見える（script.js の touch）。
-   ヒーローはブラウザ自身が動かす sticky に置き換える：大きな文字はその場に止まり、写真がスクロールで上がってきて重なる */
+   スクロール中の描画を軽くする（動きの扱いは script.js の touch を参照） */
 @media (hover:none){
-  .hero{overflow:clip}
-  .hero-type-wrap{position:sticky}
-  .hc,.sp{will-change:auto}
+  .sp{will-change:auto}
   .read .ch{transition:none}
   .hs-photo img{filter:none}
 }

@@ -3,7 +3,8 @@
   var doc=document, body=doc.body, reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var vh=window.innerHeight, vw=window.innerWidth;
   /* 指でスクロールする画面（スマホ・タブレット）。iPhone のスクロールは JavaScript とは別に動くので、
-     スクロールに合わせて要素の縦の位置を JavaScript で動かすと1コマ遅れて前後に揺れて見える。こういう画面ではその動きを使わない */
+     スクロールに合わせて要素の縦の位置を JavaScript で動かすと1コマ遅れて前後に揺れて見える。
+     こういう画面では STAFF の似顔絵の動きを止める。ヒーローの動きは残し、スクロール位置へ少しだけ遅れて追いつかせて揺れを抑える */
   var touch=window.matchMedia('(hover: none)').matches;
   function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
   function lerp(a,b,t){ return a+(b-a)*t; }
@@ -268,18 +269,22 @@
      スクロールに合わせた動き（ここでは要素の位置を測らない）
      ========================================================= */
   var lastY=-1, gDrawn=false, curTab=-2, heroCardsEl=doc.getElementById('heroCards');
-  var blX=0, blT=0, ctX=0, ctT=0;
-  function chase(a,b){ var n=lerp(a,b,.16); return Math.abs(b-n)<.2?b:n; }
+  var blX=0, blT=0, ctX=0, ctT=0, heroY=0;
+  function chase(a,b,r){ var n=lerp(a,b,r||.16); return Math.abs(b-n)<.2?b:n; }
   function inView(b,y){ return b.t-y<vh&&b.t+b.h-y>0; }
   function frame(){
     var y=Math.max(0,window.scrollY);  /* iPhone の上端で引っぱった時のマイナスは無視 */
+    /* ヒーロー：写真が上がって傾く・大きな文字はゆっくり */
+    var hy=touch?chase(heroY,y,.35):y;
+    if(hy!==heroY||dirty){
+      heroY=hy;
+      if(hy<vh*1.4){
+        heroWrap.style.transform='translate3d(0,'+(hy*.35)+'px,0)'; heroWrap.style.opacity=clamp(1-hy/(vh*.9),0,1);
+        if(heroLive) heroCards.forEach(function(c,i){ var sp=[.9,1.25,1.05,.8][i]; c.style.setProperty('--ty',(-hy*sp)+'px'); c.style.setProperty('--sc',1+hy/vh*.12); });
+      }
+    }
     if(O&&(y!==lastY||dirty)){
       lastY=y; dirty=false;
-      /* ヒーロー：写真が上がって傾く・大きな文字はゆっくり */
-      if(!touch&&y<vh*1.4){
-        heroWrap.style.transform='translate3d(0,'+(y*.35)+'px,0)'; heroWrap.style.opacity=clamp(1-y/(vh*.9),0,1);
-        if(heroLive) heroCards.forEach(function(c,i){ var sp=[.9,1.25,1.05,.8][i]; c.style.setProperty('--ty',(-y*sp)+'px'); c.style.setProperty('--sc',1+y/vh*.12); });
-      }
       /* MESSAGE：年が 1956 → 2026 と進む・読むと濃くなる */
       if(inView(O.concept,y)){
         var op=clamp((O.odoTop-(O.odo.t-y)+vh*.15)/Math.max(1,O.odo.h-O.odoH),0,1);
