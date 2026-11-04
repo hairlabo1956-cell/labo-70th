@@ -1,5 +1,16 @@
 # LABO 70th ANNIVERSARY ｜ 実装者向けメモ
 
+> ## 2026-11 感謝祭後の版に作り替え
+> 感謝祭（2026-10-31、来場200名超）の終了を受けて、告知サイトからお礼と記録のサイトにした。
+> - 区画：ヒーロー → MESSAGE（お礼の本文）→ PHOTOS（曲面ギャラリー＝写真ページの入口）→ STAFF → HISTORY → SPECIAL THANKS（＋出店者・DJ・駐車場）→ SEE YOU at LABO → フッター。EVENT・FOOD & DRINK・カウントダウン・GEN カードは HTML / CSS / JS とも削除
+> - 写真ページ：photos.html / photos.css / photos.js。写真の一覧は photos-data.js（1枚＝1行「番号|幅|高さ」、covers が表紙）。写真は photos/{prep,day}/番号.jpg（長辺2800px q82）と t/番号.jpg（短辺480px q70）。作るのはローカルの _tools/build-photos.js（元写真は _photos/準備・当日、Exif は落とす、作り直すと番号が振り直される）
+> - 保存：PC・Android は a[download]。iPhone は navigator.share（「画像を保存」を出すため）。LINE・Instagram 内は拡大して長押しの案内
+> - トップの写真は images/event-{prep,day}-番号.jpg（番号は写真ページのNo.）。共有画像は images/ogp-thanks.jpg（旧 ogp.jpg は未使用）
+> - _headers：写真（/photos*、/images/event-*）に X-Robots-Tag: noindex, noimageindex
+> - 掲載の取り下げ：編集マニュアル5章
+> - 反映方法：リポジトリ直下を git の作業フォルダにした（_ で始まるフォルダと .claude は .git/info/exclude で除外）。確認は preview ブランチ（https://preview.labo-70th.pages.dev/）、問題なければ main へ
+> - Cloudflare Pages は 404.html が無いので、存在しないパスも 200 でトップページを返す（ファイルの存在確認はステータスだけでは不可）
+>
 > ## 2026-10-06 デザインを「MOTION 案」に切り替え
 > 発注者の判断で、eightdesign.co.jp の動きを参考にした MOTION 案を本番にした。index.html / style.css / script.js は丸ごと新しいもの。
 > **この下の節（ファイル構成の一部・設計判断・変更履歴）は、切り替え前のデザインについての記録**。前のデザインのファイルは制作者の手元（_old-20261006/）に控えてあり、GitHub の履歴からも戻せる。
