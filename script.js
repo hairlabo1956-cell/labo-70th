@@ -2,6 +2,9 @@
 (function(){
   var doc=document, body=doc.body, reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var vh=window.innerHeight, vw=window.innerWidth;
+  /* 指でスクロールする画面（スマホ・タブレット）。iPhone のスクロールは JavaScript とは別に動くので、
+     スクロールに合わせて要素の縦の位置を JavaScript で動かすと1コマ遅れて前後に揺れて見える。こういう画面ではその動きを使わない */
+  var touch=window.matchMedia('(hover: none)').matches;
   function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
   function lerp(a,b,t){ return a+(b-a)*t; }
 
@@ -125,12 +128,13 @@
       var r=canvas.getBoundingClientRect(); W=r.width; H=r.height; dpr=Math.min(2,window.devicePixelRatio||1);
       canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
       cw=opt.cw(W,H); ch=cw*opt.ratio; gap=cw*opt.gap;
-      offs=entries.map(function(e){ return e.img?cover(e.img,Math.round(cw*dpr),Math.round(ch*dpr)):null; });
+      var made=new Map();  /* 同じ写真は1枚だけ作って使い回す（フッターの帯は同じ写真を4周分並べている） */
+      offs=entries.map(function(e){ if(!e.img) return null; if(!made.has(e.img)) made.set(e.img,cover(e.img,Math.round(cw*dpr),Math.round(ch*dpr))); return made.get(e.img); });
       self.step=cw+gap; self.travel=(entries.length-1)*self.step;
     };
     self.draw=function(){
       ctx.clearRect(0,0,W,H);
-      var cy=H*opt.cy, k=opt.bend, sw=Math.max(3,Math.round(W/320));
+      var cy=H*opt.cy, k=opt.bend, sw=Math.max(touch?4:3,Math.round(W/320));
       for(var j=0;j<entries.length;j++){
         var o=offs[j]; if(!o) continue;
         var left=W/2+j*self.step-self.cur-cw/2;
@@ -146,10 +150,12 @@
   }
   function loadImg(src){ return new Promise(function(res){ var i=new Image(); i.onload=function(){ res(i); }; i.onerror=function(){ res(null); }; i.src=src; }); }
 
-  var wPin=doc.getElementById('wPin'), wCanvas=doc.getElementById('wCanvas'), wTitle=doc.getElementById('wTitle'), wIn=wTitle.querySelector('.wt-in');
+  var wPin=doc.getElementById('wPin'), wSticky=wPin.querySelector('.w-sticky'), wCanvas=doc.getElementById('wCanvas'), wTitle=doc.getElementById('wTitle'), wIn=wTitle.querySelector('.wt-in');
   var wPill=doc.getElementById('wPill'), wNo=doc.getElementById('wNo'), wTicks=doc.getElementById('wTicks'), wGo=doc.getElementById('wGo');
   var items=[].map.call(doc.querySelectorAll('#wData li'),function(li){ return {title:li.getAttribute('data-title'),pill:li.getAttribute('data-pill'),color:li.getAttribute('data-color'),imgs:li.getAttribute('data-imgs').split('|'),link:li.getAttribute('data-link')}; });
-  var gallery=null, gEntries=[], activeItem=-1;
+  var gallery=null, gEntries=[], activeItem=-1, G_GAP=.14;
+  var gN=items.reduce(function(a,it){ return a+it.imgs.length; },0);
+  function gCw(W){ return W<700?W*.66:Math.min(W*.3,520); }
   function setItem(n,instant){
     if(n===activeItem) return; activeItem=n; var it=items[n];
     var apply=function(){ wIn.innerHTML=it.title; wTitle.style.setProperty('--wc',it.color); wPill.textContent=it.pill; wGo.href=it.link; wNo.textContent=(n<9?'0':'')+(n+1); };
@@ -164,7 +170,7 @@
     return Promise.all(jobs);
   })().then(function(list){
     gEntries=list.filter(function(e){ return e.img; });
-    gallery=Curve(wCanvas,gEntries,{cw:function(W){ return W<700?W*.66:Math.min(W*.3,520); },ratio:.68,gap:.14,cy:.56,bend:.34});
+    gallery=Curve(wCanvas,gEntries,{cw:gCw,ratio:.68,gap:G_GAP,cy:.56,bend:.34});
     layout(true);
   });
 
@@ -225,12 +231,12 @@
      ・スマホのアドレスバーが出入りすると画面の高さが少し変わるが、その時は何もしない（ページの長さが変わって中身が前後するのを防ぐ）
      ・各区画の位置はここでまとめて測っておき、スクロール中は測り直さない（カクつき防止）
      ========================================================= */
-  var touch=window.matchMedia('(hover: none)').matches, lastW=-1, O=null;
+  var lastW=-1, O=null, hasSvh=window.CSS&&CSS.supports('height','1svh');
   function box(el,sy){ var r=el.getBoundingClientRect(); return {t:r.top+sy,h:r.height}; }
   function measure(){
     var sy=window.scrollY;
     O={concept:box(concept,sy), odo:box(odoPin,sy), odoTop:parseFloat(getComputedStyle(odoSticky).top)||0, odoH:odoSticky.offsetHeight,
-       read:box(read,sy), bl:box(blTrack.parentNode,sy), w:box(wPin,sy),
+       read:box(read,sy), bl:box(blTrack.parentNode,sy), w:box(wPin,sy), wS:wSticky.offsetHeight,
        st:box(stStage,sy), hs:box(hsStack,sy), ct:box(contact,sy), ft:box(ftCanvas,sy), dark:darkEls.map(function(el){ return box(el,sy); }),
        hsTops:[], hsStick:sheets.length?parseFloat(getComputedStyle(sheets[0]).top)||0:0};
     var acc=O.hs.t+(parseFloat(getComputedStyle(hsStack).paddingTop)||0);
@@ -243,7 +249,11 @@
     lastW=w; vh=h; vw=w;
     fitHS();
     odoPin.style.setProperty('--oh',odoSticky.offsetHeight+'px');
-    if(gallery){ gallery.size(); gDrawn=false; wPin.style.height=(vh+gallery.travel*1.25+vh*.25)+'px'; }
+    if(gallery){ gallery.size(); gDrawn=false; }
+    /* ピン留めの長さは写真の読み込みを待たずに決める（読み込み後にページの長さが変わって中身が飛ばないように）。
+       画面の高さはアドレスバーで変わらない svh で計算する */
+    var wTravel=(gallery?gallery.travel:(gN-1)*gCw(wCanvas.clientWidth)*(1+G_GAP))*1.25;
+    wPin.style.height=hasSvh?'calc(125svh + '+wTravel+'px)':(vh*1.25+wTravel)+'px';
     if(strip) strip.size();
     measure();
   }
@@ -258,13 +268,15 @@
      スクロールに合わせた動き（ここでは要素の位置を測らない）
      ========================================================= */
   var lastY=-1, gDrawn=false, curTab=-2, heroCardsEl=doc.getElementById('heroCards');
+  var blX=0, blT=0, ctX=0, ctT=0;
+  function chase(a,b){ var n=lerp(a,b,.16); return Math.abs(b-n)<.2?b:n; }
   function inView(b,y){ return b.t-y<vh&&b.t+b.h-y>0; }
   function frame(){
-    var y=window.scrollY;
+    var y=Math.max(0,window.scrollY);  /* iPhone の上端で引っぱった時のマイナスは無視 */
     if(O&&(y!==lastY||dirty)){
       lastY=y; dirty=false;
       /* ヒーロー：写真が上がって傾く・大きな文字はゆっくり */
-      if(y<vh*1.4){
+      if(!touch&&y<vh*1.4){
         heroWrap.style.transform='translate3d(0,'+(y*.35)+'px,0)'; heroWrap.style.opacity=clamp(1-y/(vh*.9),0,1);
         if(heroLive) heroCards.forEach(function(c,i){ var sp=[.9,1.25,1.05,.8][i]; c.style.setProperty('--ty',(-y*sp)+'px'); c.style.setProperty('--sc',1+y/vh*.12); });
       }
@@ -276,17 +288,17 @@
         if(k!==litCount){ var a=Math.min(k,litCount), b=Math.max(k,litCount); for(var i=a;i<b;i++) chars[i].classList.toggle('on',i<k); litCount=k; marks.forEach(function(m){ m.p.classList.toggle('lit',k>m.last); }); }
       }
       /* 流れる大文字 */
-      if(inView(O.bl,y)) blTrack.style.transform='translate3d('+(-(vh-(O.bl.t-y))*.6)+'px,0,0)';
+      if(inView(O.bl,y)) blT=-(vh-(O.bl.t-y))*.6;
       /* 曲面ギャラリー：進み具合だけ決める（描くのは下） */
-      if(gallery&&inView(O.w,y)) gallery.offset=clamp((y-O.w.t)/Math.max(1,O.w.h-vh),0,1)*gallery.travel;
+      if(gallery&&inView(O.w,y)) gallery.offset=clamp((y-O.w.t)/Math.max(1,O.w.h-O.wS),0,1)*gallery.travel;
       /* STAFF：似顔絵がそれぞれの速さで動く */
-      if(inView(O.st,y)){ var q=(O.st.t-y+O.st.h/2-vh/2)/vh; sps.forEach(function(s){ s.style.setProperty('--py',(q*+s.getAttribute('data-depth')*-420)+'px'); }); }
+      if(!touch&&inView(O.st,y)){ var q=(O.st.t-y+O.st.h/2-vh/2)/vh; sps.forEach(function(s){ s.style.setProperty('--py',(q*+s.getAttribute('data-depth')*-420)+'px'); }); }
       /* 年表：いま見ているシートのタブ */
       var cur=-1; for(var n=0;n<O.hsTops.length;n++){ if(y>=O.hsTops[n]-O.hsStick-2) cur=n; }
       if(cur!==curTab){ curTab=cur; tabs.forEach(function(t,i){ t.classList.toggle('cur',i===cur); }); }
       /* CONTACT：背景の大きな文字が左右に流れる */
       var ctTop=O.ct.t-y;
-      if(inView(O.ct,y)){ var mm=(vh-ctTop)*.35; ctRows.forEach(function(s,i){ s.style.transform='translate3d('+((i%2?1:-1)*mm-(i%2?vw*.4:0))+'px,0,0)'; }); }
+      if(inView(O.ct,y)) ctT=(vh-ctTop)*.35;
       /* ヘッダーの文字色（暗い区画の上では白） */
       var dark=false; O.dark.forEach(function(d){ var t=d.t-y; if(t<=40&&t+d.h>40) dark=true; });
       body.classList.toggle('on-dark',dark);
@@ -301,6 +313,9 @@
       var idx=clamp(Math.round(gallery.cur/gallery.step),0,gEntries.length-1); setItem(gEntries[idx].item);
       wTicks.style.transform='translate3d('+(-(gallery.cur*.5)%8)+'px,0,0)';
     }
+    /* 流れる大文字：スクロールの位置に少しずつ追いつく（位置が飛び飛びに届いても、なめらかに動く） */
+    if(O&&blX!==blT&&inView(O.bl,y)){ blX=chase(blX,blT); blTrack.style.transform='translate3d('+blX+'px,0,0)'; }
+    if(O&&ctX!==ctT&&inView(O.ct,y)){ ctX=chase(ctX,ctT); ctRows.forEach(function(s,i){ s.style.transform='translate3d('+((i%2?1:-1)*ctX-(i%2?vw*.4:0))+'px,0,0)'; }); }
     /* フッターの曲面の帯（見えている間はゆっくり自動で流れる） */
     if(strip&&O&&inView(O.ft,y)){ strip.cur+=.6; if(strip.cur>strip.step*stripN*2) strip.cur-=strip.step*stripN; strip.draw(); }
     requestAnimationFrame(frame);
@@ -314,6 +329,7 @@
   var lm=doc.querySelector('.logo-marq');
   if(lm&&!reduced){
     var lmTrack=lm.querySelector('.lm-track'), lmBase=[].slice.call(lmTrack.children);
+    lm.classList.add('on');  /* 読み込みを待たずに1列にしておく（後から帯の高さが変わって中身が飛ばないように） */
     var lmBuild=function(){
       lmTrack.innerHTML=''; lmBase.forEach(function(li){ lmTrack.appendChild(li); }); lm.classList.add('on');
       var one=lmTrack.scrollWidth, need=Math.max(1,Math.ceil((window.innerWidth+200)/Math.max(one,1))), set=[], r, k;

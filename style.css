@@ -21,7 +21,7 @@
   --pad:clamp(20px,5vw,72px);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+@media (hover:hover){html{scroll-behavior:smooth}}  /* スマホは長いページを一気に動かすとカクつくので、メニューからはすぐ移動する */
 body{font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body.lock{overflow:hidden}
 img{display:block;max-width:100%}
@@ -417,4 +417,15 @@ ul,ol{list-style:none}
   .ht > span,.hero-cards .hc,.hero-jp,.rise{transform:none;opacity:1}
   .ht-script{clip-path:none}
   .read .ch{color:var(--ink)}
+}
+
+/* ---------------- 指でスクロールする画面（スマホ・タブレット） ----------------
+   iPhone のスクロールは JavaScript とは別に動くので、スクロールに合わせて JavaScript で縦の位置を動かすと前後に揺れて見える（script.js の touch）。
+   ヒーローはブラウザ自身が動かす sticky に置き換える：大きな文字はその場に止まり、写真がスクロールで上がってきて重なる */
+@media (hover:none){
+  .hero{overflow:clip}
+  .hero-type-wrap{position:sticky}
+  .hc,.sp{will-change:auto}
+  .read .ch{transition:none}
+  .hs-photo img{filter:none}
 }

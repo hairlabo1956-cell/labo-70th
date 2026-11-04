@@ -19,7 +19,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 [hidden]{display:none!important}
-html{scroll-behavior:smooth}
+@media (hover:hover){html{scroll-behavior:smooth}}
 body{font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body.lb-open{overflow:hidden}
 img{display:block;max-width:100%}
@@ -29,7 +29,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 :focus-visible{outline:2px solid var(--orange);outline-offset:3px}
 
 /* ヘッダー */
-.hd{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:calc(14px + env(safe-area-inset-top,0px)) var(--pad) 14px;background:rgba(246,245,241,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.hd{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:calc(14px + env(safe-area-inset-top,0px)) var(--pad) 14px;background:rgba(246,245,241,.97)}
 .logo{display:flex;align-items:baseline;gap:.7em;text-decoration:none}
 .logo b{font-family:var(--disp);font-variation-settings:'wdth' 125;font-weight:900;font-size:1.3rem;letter-spacing:.02em}
 .logo span{font-family:var(--disp);font-weight:600;font-size:.62rem;letter-spacing:.18em}
