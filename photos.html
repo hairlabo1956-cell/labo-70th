@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- 写真ページ。写真の一覧は photos-data.js に書いてあります（この HTML に写真は書きません）。
+     お客様の写真が載るページなので、検索結果・画像検索には出さない設定にしています（noindex）。消さないでください -->
+<title>PHOTOS ｜ LABO 70th ANNIVERSARY</title>
+<meta name="robots" content="noindex,noimageindex">
+<meta name="description" content="美容室LABO 70周年感謝祭の写真。準備の日と当日の写真を保存していただけます。">
+<meta name="theme-color" content="#212E7D">
+<link rel="icon" href="favicon.png" sizes="64x64" type="image/png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Noto+Sans+JP:wght@400;500;700;900&family=Covered+By+Your+Grace&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="photos.css">
+<script src="photos-data.js" defer></script>
+<script src="photos.js" defer></script>
+</head>
+<body id="top">
+
+<header class="hd">
+  <a class="logo" href="index.html"><b>LABO</b><span>70TH ANNIVERSARY</span></a>
+  <a class="back" href="index.html"><i aria-hidden="true">←</i>トップへ戻る</a>
+</header>
+
+<main>
+  <section class="ph-top">
+    <h1><span class="ph-script" aria-hidden="true">Thanks!</span>PHOTOS</h1>
+    <p class="ph-lead">70周年感謝祭の写真です。<br>写真の右下のボタンから、お気に入りの1枚を保存していただけます。</p>
+  </section>
+
+  <nav class="albums" id="albums" aria-label="アルバム">
+    <a class="album" href="#prep" data-album="prep"><span class="al-cover"><img alt="" data-cover="prep"></span><span class="al-tx"><b>10.30</b><span>準備</span><em data-count="prep"></em></span></a>
+    <a class="album" href="#day" data-album="day"><span class="al-cover"><img alt="" data-cover="day"></span><span class="al-tx"><b>10.31</b><span>当日</span><em data-count="day"></em></span></a>
+  </nav>
+
+  <section class="gallery" id="gallery" aria-labelledby="galleryTtl">
+    <h2 id="galleryTtl"></h2>
+    <ul class="grid" id="grid"></ul>
+    <p class="empty" id="empty" hidden>写真は準備中です。もうしばらくお待ちください。</p>
+  </section>
+
+  <section class="ph-note">
+    <h2>写真について</h2>
+    <p>保存した写真は、SNSへの投稿など個人の範囲で自由にお使いください。お店や会社の宣伝など、商用での利用はご遠慮ください。</p>
+    <p>写真の掲載を希望されない方は、写真の番号（拡大すると表示されます）を添えて、InstagramのDMまたは公式LINEでご連絡ください。すぐに取り下げます。</p>
+    <div class="note-links"><a href="https://www.instagram.com/labo.1956/" target="_blank" rel="noopener">Instagram</a><a href="https://line.me/R/ti/p/@zgn8493r" target="_blank" rel="noopener">公式LINE</a></div>
+  </section>
+</main>
+
+<footer class="ft"><p>〒329-2123 栃木県矢板市上町15-29</p><p>© LABO</p></footer>
+
+<a class="to-top" id="toTop" href="#top"><span>ページトップへ</span><i aria-hidden="true">↑</i></a>
+
+<!-- 拡大表示 -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="写真の拡大表示" hidden>
+  <div class="lb-top"><p id="lbNo"></p><button class="lb-x" id="lbClose" type="button" aria-label="閉じる"><i aria-hidden="true"></i><i aria-hidden="true"></i></button></div>
+  <div class="lb-stage" id="lbStage">
+    <img id="lbImg" alt="">
+    <button class="lb-arrow prev" id="lbPrev" type="button" aria-label="前の写真">←</button>
+    <button class="lb-arrow next" id="lbNext" type="button" aria-label="次の写真">→</button>
+  </div>
+  <div class="lb-bar">
+    <p class="lb-hint" id="lbHint" hidden>このアプリの中では保存ボタンが使えないことがあります。写真を長押しして保存してください。</p>
+    <a class="lb-dl" id="lbDl" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10.5 12 15.5 17 10.5M4.5 20h15"/></svg><span>この写真を保存</span></a>
+  </div>
+</div>
+
+<!-- iPhone で保存の準備に時間がかかった時に、もう一度押してもらう -->
+<div class="sheet" id="sheet" role="status" hidden><p id="sheetTx"></p><button id="sheetBtn" type="button" hidden>写真に保存</button></div>
+
+</body>
+</html>

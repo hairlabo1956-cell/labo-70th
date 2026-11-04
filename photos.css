@@ -1,0 +1,120 @@
+/* =========================================================
+   LABO 70th — 写真ページ（準備・当日のアルバム。好きな写真を保存できる）
+   色と書体はトップページ（style.css）と同じ
+   ========================================================= */
+:root{
+  --bg:#F6F5F1;
+  --ink:#1B1F3B;
+  --navy:#212E7D;
+  --navy-d:#171F57;
+  --night:#10153C;
+  --orange:#FF9900;
+  --mute:#6B7090;
+  --line:#D9DBE5;
+  --disp:'Archivo','Arial Black',sans-serif;
+  --hand:'Covered By Your Grace','Noto Sans JP',cursive;
+  --sans:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;
+  --ease:cubic-bezier(.22,.8,.2,1);
+  --pad:max(clamp(20px,5vw,72px),env(safe-area-inset-left,0px),env(safe-area-inset-right,0px));
+}
+*{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.lb-open{overflow:hidden}
+img{display:block;max-width:100%}
+a{color:inherit}
+ul{list-style:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+
+/* ヘッダー */
+.hd{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:calc(14px + env(safe-area-inset-top,0px)) var(--pad) 14px;background:rgba(246,245,241,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.logo{display:flex;align-items:baseline;gap:.7em;text-decoration:none}
+.logo b{font-family:var(--disp);font-variation-settings:'wdth' 125;font-weight:900;font-size:1.3rem;letter-spacing:.02em}
+.logo span{font-family:var(--disp);font-weight:600;font-size:.62rem;letter-spacing:.18em}
+.back{display:inline-flex;align-items:center;gap:.5em;font-weight:700;font-size:.82rem;text-decoration:none;white-space:nowrap}
+.back i{font-style:normal;color:var(--orange);font-weight:900;transition:transform .3s var(--ease)}
+.back:hover i{transform:translateX(-4px)}
+
+/* 見出し */
+.ph-top{padding:clamp(40px,8vh,84px) var(--pad) clamp(26px,4vh,40px)}
+.ph-top h1{position:relative;display:inline-block;font-family:var(--disp);font-variation-settings:'wdth' 125;font-weight:900;font-size:clamp(3.4rem,13vw,9.6rem);line-height:.9;letter-spacing:-.01em}
+.ph-script{position:absolute;right:-.12em;top:-.46em;font-family:var(--hand);font-weight:400;font-size:.52em;letter-spacing:0;color:var(--orange);transform:rotate(-7deg)}
+.ph-lead{margin-top:clamp(18px,3vh,26px);font-weight:700;font-size:clamp(.9rem,1.2vw,1rem);letter-spacing:.04em}
+
+/* アルバム */
+.albums{display:grid;grid-template-columns:repeat(2,minmax(0,min(50%,400px)));gap:clamp(10px,1.6vw,22px);padding:0 var(--pad)}
+.album{position:relative;display:block;overflow:hidden;border-radius:14px;background:var(--navy-d);color:#fff;text-decoration:none;box-shadow:0 0 0 0 var(--orange);transition:box-shadow .25s}
+.album.on{box-shadow:0 0 0 4px var(--orange)}
+.album::after{content:'';position:absolute;left:0;right:0;bottom:0;height:64%;background:linear-gradient(transparent,rgba(16,21,60,.72));pointer-events:none}
+.al-cover{display:block;aspect-ratio:16/9}
+.al-cover img{width:100%;height:100%;object-fit:cover;opacity:.72;transition:transform .9s var(--ease),opacity .3s}
+.album:hover .al-cover img{transform:scale(1.04);opacity:.86}
+.album.on .al-cover img{opacity:.86}
+.al-tx{position:absolute;z-index:1;left:clamp(12px,1.8vw,24px);bottom:clamp(10px,1.4vw,20px);right:clamp(12px,1.8vw,24px);display:flex;align-items:baseline;flex-wrap:wrap;gap:0 .6em;text-shadow:0 1px 14px rgba(16,21,60,.55)}
+.al-tx b{font-family:var(--disp);font-variation-settings:'wdth' 125;font-weight:900;font-size:clamp(1.5rem,4vw,3.2rem);line-height:1.1}
+.al-tx span{font-weight:900;font-size:clamp(.9rem,1.6vw,1.25rem)}
+.al-tx em{font-style:normal;font-weight:500;font-size:.76rem;opacity:.92}
+
+/* 写真の並び */
+.gallery{padding:clamp(34px,6vh,60px) var(--pad) 0;scroll-margin-top:60px}
+.gallery h2{font-weight:900;font-size:clamp(1.05rem,1.8vw,1.35rem);letter-spacing:.04em;margin-bottom:clamp(14px,2vh,22px)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(150px,17vw,230px),1fr));gap:clamp(6px,.9vw,12px)}
+.tile{position:relative;aspect-ratio:1;overflow:hidden;border-radius:8px;background:#E4E2DA}
+.t-open{display:block;width:100%;height:100%}
+.t-open img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+@media (hover:hover) and (pointer:fine){ .t-open:hover img{transform:scale(1.04)} }
+.t-dl{position:absolute;right:7px;bottom:7px;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#fff;color:var(--navy);box-shadow:0 2px 10px rgba(16,21,60,.28);transition:background .25s,color .25s}
+.t-dl::before{content:'';position:absolute;inset:-6px}
+.t-dl:hover{background:var(--orange);color:var(--ink)}
+.t-dl svg,.lb-dl svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.empty{padding:40px 0;font-weight:700;text-align:center;color:var(--mute)}
+
+/* 写真について */
+.ph-note{margin:clamp(54px,9vh,90px) var(--pad) 0;padding-top:clamp(24px,4vh,34px);border-top:1px solid var(--line);max-width:52em;font-size:.86rem;line-height:1.95}
+.ph-note h2{font-weight:900;font-size:1rem;letter-spacing:.04em;margin-bottom:.6em}
+.ph-note p + p{margin-top:.6em}
+.note-links{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:1em;font-weight:700}
+.note-links a{text-decoration-color:var(--orange);text-decoration-thickness:2px;text-underline-offset:.25em}
+
+.ft{display:flex;justify-content:space-between;gap:6px 20px;flex-wrap:wrap;margin-top:clamp(50px,8vh,80px);padding:20px var(--pad) calc(90px + env(safe-area-inset-bottom,0px));background:var(--night);color:#fff;font-size:.76rem}
+
+/* ページトップへ */
+.to-top{position:fixed;right:var(--pad);bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:15;display:flex;align-items:center;gap:10px;background:var(--orange);color:var(--ink);text-decoration:none;font-weight:900;font-size:.8rem;letter-spacing:.06em;padding:6px 6px 6px 16px;border-radius:99px;box-shadow:0 10px 26px rgba(16,21,60,.25);transition:opacity .35s,transform .35s var(--ease)}
+.to-top i{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font-style:normal}
+.to-top.hide{opacity:0;transform:translateY(20px);pointer-events:none}
+
+/* 拡大表示 */
+.lb{position:fixed;inset:0;z-index:40;display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:var(--night);color:#fff}
+.lb-top{display:flex;justify-content:space-between;align-items:center;padding:calc(10px + env(safe-area-inset-top,0px)) var(--pad) 10px}
+.lb-top p{font-weight:700;font-size:.86rem;letter-spacing:.04em}
+.lb-x{position:relative;width:44px;height:44px;margin-right:-8px}
+.lb-x i{position:absolute;left:11px;top:21px;width:22px;height:2px;background:#fff;transform:rotate(45deg)}
+.lb-x i + i{transform:rotate(-45deg)}
+.lb-stage{position:relative;min-height:0;display:flex;align-items:center;justify-content:center;padding:0 clamp(0px,5vw,84px)}
+#lbImg{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.lb-arrow{position:absolute;top:50%;width:48px;height:48px;margin-top:-24px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-weight:900;font-size:1.1rem;transition:background .25s}
+.lb-arrow:hover{background:var(--orange);color:var(--ink)}
+.lb-arrow.prev{left:clamp(6px,1.4vw,20px)}
+.lb-arrow.next{right:clamp(6px,1.4vw,20px)}
+.lb-arrow:disabled{opacity:.25;pointer-events:none}
+.lb-bar{display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px var(--pad) calc(16px + env(safe-area-inset-bottom,0px))}
+.lb-hint{font-size:.8rem;font-weight:500;text-align:center;line-height:1.7}
+.lb-dl{display:inline-flex;align-items:center;gap:10px;background:var(--orange);color:var(--ink);text-decoration:none;font-weight:900;font-size:.92rem;letter-spacing:.04em;padding:12px 26px;border-radius:99px;transition:background .25s}
+.lb-dl:hover{background:#fff}
+
+/* iPhone の保存のお知らせ */
+.sheet{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:50;transform:translateX(-50%);display:flex;align-items:center;gap:14px;width:max-content;max-width:calc(100vw - 32px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:.85rem;font-weight:700;box-shadow:0 12px 30px rgba(16,21,60,.35)}
+.sheet button{flex:none;background:var(--orange);color:var(--ink);font-weight:900;padding:8px 14px;border-radius:99px}
+
+@media (max-width:640px){
+  .logo span{display:none}
+  .al-tx em{width:100%}
+  .lb-arrow{display:none}
+  .lb-stage{padding:0}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none !important;transition:none !important}
+}

@@ -1,0 +1,9 @@
+# お客様が写っている写真を検索結果・画像検索に出さないための設定（Cloudflare Pages が読みます）
+/photos
+  X-Robots-Tag: noindex, noimageindex
+/photos.html
+  X-Robots-Tag: noindex, noimageindex
+/photos/*
+  X-Robots-Tag: noindex, noimageindex
+/images/event-*
+  X-Robots-Tag: noindex, noimageindex
